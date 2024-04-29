@@ -19,7 +19,7 @@ const App = () => {
     }
   };
 
-  const placeBet= () => {
+  const placeBet = () => {
     // call
   }
 
@@ -41,43 +41,55 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
+    <>
+     {/* Navbar */}
+     <nav className='nav_cont'>
+     <ul>
+       <li>Profile</li>
+       <li>Home</li>
+       <li>Transactions</li>
+     </ul>
+   </nav>
     <div className="app-container">
-      {/* Navbar */}
-      <nav>
-        <ul>
-          <li>Profile</li>
-          <li>Home</li>
-          <li>Transactions</li>
-        </ul>
-      </nav>
+     
       <div className="body-container">
-          {!loggedIn ? <Login setLoggedIn={setLoggedIn} /> :  <div>
-          <img src="ipl2024.jpg" alt="IPL 2024" />
+        {!loggedIn ? <Login setLoggedIn={setLoggedIn} /> : <div>
+          <img className='ipl_logo' src="ipl_img.png" alt="IPL 2024" />
 
-      {/* Body */}
-      <div className="body-container">
-        <section>
-          <h2>Today's Match</h2>
-          {/* Display today's match image */}
-          <img src="todays_match.jpg" alt="Today's Match" />
-          {/* Allow user to select top performers */}
-          <div>
-            <button onClick={() => handleSelection('Player1')}>Player 1</button>
-            <button onClick={() => handleSelection('Player2')}>Player 2</button>
-            {/* Add more players as needed */}
+          {/* Body */}
+          <div className="body-container">
+            <section>
+              <h2>Today's Match</h2>
+              {/* Display today's match image */}
+              <div style={{'display':'flex'}}>
+              <div><img className="team1" src="srh_logo.png" alt="SRH vs CSK" /><h4>SRH</h4></div> <div> <img  className="team2" src="csk.png" alt="SRH vs CSK" /><h4>CSK</h4></div>
+
+              </div>
+              {/* Allow user to select top performers */}
+              <div className='plyr_cont'>
+                <div className='plyrNum'>
+                  <img className='plyr_logo' src="patcummins.png" /> <button className="plyr_btn" style={{'display':'block'}} onClick={() => handleSelection('Player1')}>Player 1</button>
+
+                </div>
+                <div className='plyrNum'>
+                  <img className='plyr_logo' src="dhoni.png" /> <button className="plyr_btn"style={{'display':'block'}} onClick={() => handleSelection('Player2')}>Player 2</button>
+
+                </div>
+                {/* Add more players as needed */}
+              </div>
+            </section>
+
+            {/* Betting section */}
+            <section>
+              <h2>Bet on Top Performers</h2>
+              <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} />
+              <button className='bet_btn' onClick={placeBet}>Place Bet</button>
+            </section>
           </div>
-        </section>
-
-        {/* Betting section */}
-        <section>
-          <h2>Bet on Top Performers</h2>
-          <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} />
-          <button onClick={placeBet}>Place Bet</button>
-        </section>
-      </div>
-      </div>}
+        </div>}
       </div>
     </div>
+    </>
   );
 };
 

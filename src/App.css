@@ -7,7 +7,43 @@ body {
 .app-container {
   padding: 20px;
 }
+.plyr_logo{
+  width: 20vh;
+  height: 20vh;
+}
 
+.plyr_cont{
+  display: flex;
+}
+.ipl_logo{
+  width: 20vh;
+  height: 20vh;
+}
+
+.team1{
+  width: 7vh;
+}
+.team2{
+  width: 7vh;
+}
+.plyrNum{
+  margin: 2vh;
+  
+}
+.plyr_btn{
+  margin-left: 10px;
+  background-color: #0072dc ;
+  border: 1px solid black;
+}
+
+.nav_cont{
+  padding: 20px;
+    background-color: cornflowerblue;
+}
+.bet_btn{
+  background-color: #0072dc ;
+  border: 1px solid black;
+}
 nav ul {
   list-style-type: none;
   padding: 0;
