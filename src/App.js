@@ -26,7 +26,7 @@ const App = () => {
     // call
     // localStorage.clear()
     console.log(localStorage.length);
-    window.location.href = `${paymentPage}?email=${JSON.parse(localStorage.getItem("userDetails")).email}`;
+    window.location.href = `${paymentPage}?email=${JSON.parse(localStorage.getItem("userDetails"))?.email || ""}`;
   }
 
   // Function to handle user's bet
@@ -67,6 +67,8 @@ const App = () => {
        <li>Profile</li>
        <li>Home</li>
        <li>Transactions</li>
+       {loggedIn && <li><button onClick={() =>{localStorage.removeItem("userDetails"); setLoggedIn(false);}}>Logout</button></li>}
+
      </ul>
    </nav>
    <img src= "iplsq.jpg" alt="IPL squad" /></div>

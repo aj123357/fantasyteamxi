@@ -11,7 +11,7 @@ const PlayerApp = () => {
     const matches = [
         {
             date: '2024-05-01',
-            teams: ['Team A'],
+            teams: ['Team A', 'Team B'],
             players: {
                 'Team A': [
                     { name: 'Player 1', photo: '/player1.jpg'},
@@ -22,10 +22,19 @@ const PlayerApp = () => {
                     { name: 'Player 6', photo: '/player3.jpg'},
                     { name: 'Player 7', photo: '/player1.jpg'}
                     // Add more players...
+                ],
+                'Team B': [
+                    { name: '_Player 1', photo: '/player1.jpg'},
+                    { name: '_Player 2', photo: '/player2.jpg'},
+                    { name: '_Player 3', photo: '/player3.jpg'},
+                    { name: '_Player 4', photo: '/player1.jpg'},
+                    { name: '_Player 5', photo: '/player2.jpg'},
+                    { name: '_Player 6', photo: '/player3.jpg'},
+                    { name: '_Player 7', photo: '/player1.jpg'}
+                    // Add more players...
                 ]
             }
         },
-        // Add more matches here...
     ];
 
     useEffect(() => {
@@ -35,20 +44,30 @@ const PlayerApp = () => {
         setCurrentMatch(match);
     }, []);
 
+    console.log(selectedPlayers);
+
     const handlePlayerSelection = (team, player, position) => {
-        setSelectedPlayers(prevSelectedPlayers => ({
-            ...prevSelectedPlayers,
-            [team]: {
-                ...prevSelectedPlayers[team],
-                [position]: player
-            }
-        }));
+        console.log(player, position);
+        // setSelectedPlayers(prevSelectedPlayers => ({
+        //     ...prevSelectedPlayers,
+        //     [team]: {
+        //         ...prevSelectedPlayers[team],
+        //         [position]: player.name
+        //     }
+        // }));
+        setSelectedPlayers({
+            ...selectedPlayers,
+            [position]: player
+        })
+
 
         const change = `${player.name} ${selectedPlayers[team]?.[position] ? 'removed' : 'selected'} for ${team}`;
-        setCurrentSelections(prevCurrentSelections => ({
-            ...prevCurrentSelections,
-            [`${team}-position-${position}`]: player.photo
-        }));
+        // setCurrentSelections(prevCurrentSelections => ({
+        //     ...prevCurrentSelections,
+        //     [`${team}-position-${position}`]: player.photo
+        // }));
+        // console.log(currentSelections);
+
     };
 
     const isPlayerSelected = (player) => {
@@ -74,22 +93,28 @@ const PlayerApp = () => {
                                 <div key={team} className="team-players">
                                     <h3>{team}</h3>
                                     <div className="dropdowns">
-                                        {[1, 2, 3].map(position => (
+                                        {[0, 1, 2].map(position => (
                                             <div key={position} className="dropdown">
                                                 <label htmlFor={`${team}-position-${position}`}>Select player #{position}:</label>
                                                 <select
                                                     id={`${team}-position-${position}`}
-                                                    onChange={e => handlePlayerSelection(team, currentMatch.players[team][e.target.value], position)}
-                                                    value={selectedPlayers[team]?.[position] || ''}
+                                                    onChange={e =>{
+                                                        console.log(JSON.stringify(e.target.value));
+                                                        handlePlayerSelection(team, currentMatch.players[team][parseInt(e.target.value)], position);
+                                                    }}
+                                                    value={selectedPlayers[position]?.name || ''}
                                                 >
-                                                    <option value="">Select a player</option>
+                                                    <option value="">
+                                                        <div>
+                                                            {selectedPlayers[position]?.name || "Select a Player"}
+                                                        </div>
+                                                    </option>
                                                     {currentMatch.players[team].map((player, index) => (
                                                         <option key={index} value={index} disabled={isPlayerSelected(player)}>
                                                             {player.name}
                                                         </option>
                                                     ))}
                                                 </select>
-                                            
                                             </div>
                                         ))}
                                     </div>
