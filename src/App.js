@@ -23,6 +23,7 @@ const App = () => {
 
   const placeBet = () => {
     // call
+    window.location.href = "https://rzp.io/l/M5ad38O8Xy";
   }
 
   // Function to handle user's bet

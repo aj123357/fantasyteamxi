@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './App.css'; // Import CSS file for styling
+import axios from "axios";
+import { host } from './Constants';
 
 const Login = ({ setLoggedIn }) => {
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [Email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [showOtpSection, setShowOtpSection] = useState(false);
 
@@ -12,13 +14,16 @@ const Login = ({ setLoggedIn }) => {
     setShowOtpSection(true);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Simulated logic to verify OTP
     // For demonstration purposes, I'm assuming OTP is correct if it's 123456
-    if (otp === '123456') {
-      setLoggedIn(true);
-    } else {
-      alert('Invalid OTP. Please try again.');
+    try{
+        const loginResponse = await axios.get(host + `login?email=${Email}&password=${otp}`);
+        console.log("data",loginResponse);
+        setLoggedIn(true);
+    } catch(e) {
+        console.log("err", e);
+        alert('Invalid Password. Please try again.');
     }
   };
 
@@ -31,9 +36,9 @@ const Login = ({ setLoggedIn }) => {
           <>
             <input
               type="text"
-              placeholder="Enter Mobile Number"
-              value={mobileNumber}
-              onChange={(e) => setMobileNumber(e.target.value)}
+              placeholder="Enter Email"
+              value={Email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <button onClick={handleNext}>Next</button>
           </>
@@ -44,11 +49,12 @@ const Login = ({ setLoggedIn }) => {
           <>
             <input
               type="text"
-              placeholder="Enter OTP"
+              placeholder="Enter Password"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
-            <button onClick={handleLogin}>Login</button>
+            
+            <button onClick={async () => await handleLogin(Email, otp)}>Login</button>
           </>
         )}
       </div>
