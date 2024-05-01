@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './App.css'; // Import CSS file for styling
 import Login from './Login';
+import PlayerApp from './PlayerApp'
+
 
 const App = () => {
   const [topPerformers, setTopPerformers] = useState([]);
@@ -43,18 +45,22 @@ const App = () => {
   return (
     <>
      {/* Navbar */}
+     <div>
      <nav className='nav_cont'>
      <ul>
+     <img className='ipl_logo' src="ipl_img.png" alt="IPL 2024" />
        <li>Profile</li>
        <li>Home</li>
        <li>Transactions</li>
      </ul>
    </nav>
+   <img src= "iplsq.jpg" alt="IPL squad" /></div>
+
     <div className="app-container">
-     
+   
       <div className="body-container">
         {!loggedIn ? <Login setLoggedIn={setLoggedIn} /> : <div>
-          <img className='ipl_logo' src="ipl_img.png" alt="IPL 2024" />
+      
 
           {/* Body */}
           <div className="body-container">
@@ -67,14 +73,14 @@ const App = () => {
               </div>
               {/* Allow user to select top performers */}
               <div className='plyr_cont'>
-                <div className='plyrNum'>
+                {/* <div className='plyrNum'>
                   <img className='plyr_logo' src="patcummins.png" /> <button className="plyr_btn" style={{'display':'block'}} onClick={() => handleSelection('Player1')}>Player 1</button>
 
-                </div>
-                <div className='plyrNum'>
+                </div> */}
+                {/* <div className='plyrNum'>
                   <img className='plyr_logo' src="dhoni.png" /> <button className="plyr_btn"style={{'display':'block'}} onClick={() => handleSelection('Player2')}>Player 2</button>
 
-                </div>
+                </div> */}
                 {/* Add more players as needed */}
               </div>
             </section>
@@ -84,10 +90,12 @@ const App = () => {
               <h2>Bet on Top Performers</h2>
               <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} />
               <button className='bet_btn' onClick={placeBet}>Place Bet</button>
+              <PlayerApp />
             </section>
           </div>
         </div>}
       </div>
+     
     </div>
     </>
   );

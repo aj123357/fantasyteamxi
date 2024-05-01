@@ -1,49 +1,61 @@
 /* App.css */
 body {
-  background-color: #1f497d; /* Dark blue background */
-  color: #fff; /* White text color */
+  background-color: #1f497d;
+  /* Dark blue background */
+  color: #fff;
+  /* White text color */
 }
 
 .app-container {
   padding: 20px;
 }
-.plyr_logo{
+
+.plyr_logo {
   width: 20vh;
   height: 20vh;
 }
 
-.plyr_cont{
+.plyr_cont {
   display: flex;
 }
-.ipl_logo{
-  width: 20vh;
-  height: 20vh;
+
+.ipl_logo {
+  width: 6vh;
+  height: 6vh;
+  position: relative;
+  top: 8px;
+  margin-right: 10px;
 }
 
-.team1{
+.team1 {
   width: 7vh;
 }
-.team2{
+
+.team2 {
   width: 7vh;
 }
-.plyrNum{
+
+.plyrNum {
   margin: 2vh;
-  
+
 }
-.plyr_btn{
+
+.plyr_btn {
   margin-left: 10px;
-  background-color: #0072dc ;
+  background-color: #0072dc;
   border: 1px solid black;
 }
 
-.nav_cont{
-  padding: 20px;
-    background-color: cornflowerblue;
+.nav_cont {
+  padding: 0px 5px 11px 10px;
+  background-color: cornflowerblue;
 }
-.bet_btn{
-  background-color: #0072dc ;
+
+.bet_btn {
+  background-color: #0072dc;
   border: 1px solid black;
 }
+
 nav ul {
   list-style-type: none;
   padding: 0;
