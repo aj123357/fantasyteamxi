@@ -20,6 +20,7 @@ const Login = ({ setLoggedIn }) => {
     try{
         const loginResponse = await axios.get(host + `login?email=${Email}&password=${otp}`);
         console.log("data",loginResponse);
+        localStorage.setItem("userDetails",JSON.stringify(loginResponse?.data?.user || undefined));
         setLoggedIn(true);
     } catch(e) {
         console.log("err", e);

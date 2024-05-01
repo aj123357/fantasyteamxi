@@ -3,13 +3,14 @@ import './App.css'; // Import CSS file for styling
 import Login from './Login';
 import PlayerApp from './PlayerApp'
 
+import { paymentPage } from './Constants';
 
 const App = () => {
   const [topPerformers, setTopPerformers] = useState([]);
   const [selectedPerformer1, setSelectedPerformer1] = useState('');
   const [selectedPerformer2, setSelectedPerformer2] = useState('');
   const [userBet, setUserBet] = useState(0);
-
+  console.log(localStorage.getItem("user"));
   // Function to handle user's selection of top performers
   const handleSelection = (performer) => {
     if (!selectedPerformer1) {
@@ -23,7 +24,9 @@ const App = () => {
 
   const placeBet = () => {
     // call
-    window.location.href = "https://rzp.io/l/M5ad38O8Xy";
+    // localStorage.clear()
+    console.log(localStorage.length);
+    window.location.href = `${paymentPage}?email=${JSON.parse(localStorage.getItem("userDetails")).email}`;
   }
 
   // Function to handle user's bet
@@ -41,7 +44,18 @@ const App = () => {
     const userWins = topPerformers.includes(selectedPerformer1) && topPerformers.includes(selectedPerformer2);
     alert(userWins ? 'Congratulations! You won!' : 'Better luck next time.');
   };
-  const [loggedIn, setLoggedIn] = useState(false);
+  // console.log();
+  if ("userDetails" in localStorage){
+    console.log(true)
+    console.log(localStorage.getItem("userDetails") === undefined || localStorage.getItem("userDetails") === null);
+    console.log(localStorage.length);
+
+  }else {
+    console.log(false)
+
+  }
+
+  const [loggedIn, setLoggedIn] = useState(!(localStorage.getItem("userDetails") === undefined || localStorage.getItem("userDetails") === null));
 
   return (
     <>
