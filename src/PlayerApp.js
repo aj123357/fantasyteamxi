@@ -5,32 +5,22 @@ import './PlayerApp.css';
 const PlayerApp = () => {
     const [currentMatch, setCurrentMatch] = useState(null);
     const [selectedPlayers, setSelectedPlayers] = useState({});
-    const [currentSelections, setCurrentSelections] = useState({});
+    const [selectedTeamAPlayers, setSelectedTeamAPlayers] = useState([]); 
 
     // Simulated data for IPL matches
     const matches = [
         {
-            date: '2024-05-01',
-            teams: ['Team A', 'Team B'],
+            date: '2024-05-02',
+            teams: ['Team A'],
             players: {
                 'Team A': [
-                    { name: 'Player 1', photo: '/player1.jpg'},
-                    { name: 'Player 2', photo: '/player2.jpg'},
+                    { name: 'Player 1', photo: '/dhoni.png'},
+                    { name: 'Player 2', photo: '/patcummins.png'},
                     { name: 'Player 3', photo: '/player3.jpg'},
                     { name: 'Player 4', photo: '/player1.jpg'},
                     { name: 'Player 5', photo: '/player2.jpg'},
                     { name: 'Player 6', photo: '/player3.jpg'},
                     { name: 'Player 7', photo: '/player1.jpg'}
-                    // Add more players...
-                ],
-                'Team B': [
-                    { name: '_Player 1', photo: '/player1.jpg'},
-                    { name: '_Player 2', photo: '/player2.jpg'},
-                    { name: '_Player 3', photo: '/player3.jpg'},
-                    { name: '_Player 4', photo: '/player1.jpg'},
-                    { name: '_Player 5', photo: '/player2.jpg'},
-                    { name: '_Player 6', photo: '/player3.jpg'},
-                    { name: '_Player 7', photo: '/player1.jpg'}
                     // Add more players...
                 ]
             }
@@ -44,41 +34,15 @@ const PlayerApp = () => {
         setCurrentMatch(match);
     }, []);
 
-    console.log(selectedPlayers);
-
     const handlePlayerSelection = (team, player, position) => {
-        console.log(player, position);
-        // setSelectedPlayers(prevSelectedPlayers => ({
-        //     ...prevSelectedPlayers,
-        //     [team]: {
-        //         ...prevSelectedPlayers[team],
-        //         [position]: player.name
-        //     }
-        // }));
         setSelectedPlayers({
             ...selectedPlayers,
             [position]: player
-        })
+        });
 
-
-        const change = `${player.name} ${selectedPlayers[team]?.[position] ? 'removed' : 'selected'} for ${team}`;
-        // setCurrentSelections(prevCurrentSelections => ({
-        //     ...prevCurrentSelections,
-        //     [`${team}-position-${position}`]: player.photo
-        // }));
-        // console.log(currentSelections);
-
-    };
-
-    const isPlayerSelected = (player) => {
-        for (const selectedTeam of Object.values(selectedPlayers)) {
-            for (const selectedPlayer of Object.values(selectedTeam)) {
-                if (selectedPlayer === player.name) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        const newSelectedTeamAPlayers = [...selectedTeamAPlayers];
+        newSelectedTeamAPlayers[position] = player;
+        setSelectedTeamAPlayers(newSelectedTeamAPlayers);
     };
 
     return (
@@ -98,19 +62,14 @@ const PlayerApp = () => {
                                                 <label htmlFor={`${team}-position-${position}`}>Select player #{position}:</label>
                                                 <select
                                                     id={`${team}-position-${position}`}
-                                                    onChange={e =>{
-                                                        console.log(JSON.stringify(e.target.value));
-                                                        handlePlayerSelection(team, currentMatch.players[team][parseInt(e.target.value)], position);
-                                                    }}
+                                                    onChange={e => handlePlayerSelection(team, currentMatch.players[team][parseInt(e.target.value)], position)}
                                                     value={selectedPlayers[position]?.name || ''}
                                                 >
                                                     <option value="">
-                                                        <div>
-                                                            {selectedPlayers[position]?.name || "Select a Player"}
-                                                        </div>
+                                                        {selectedPlayers[position]?.name || "Select a Player"}
                                                     </option>
                                                     {currentMatch.players[team].map((player, index) => (
-                                                        <option key={index} value={index} disabled={isPlayerSelected(player)}>
+                                                        <option key={index} value={index} disabled={Object.values(selectedPlayers).some(selected => selected && selected.name === player.name)}>
                                                             {player.name}
                                                         </option>
                                                     ))}
@@ -119,6 +78,11 @@ const PlayerApp = () => {
                                         ))}
                                     </div>
                                 </div>
+                            ))}
+                        </div>
+                        <div className="selected-players">
+                            {Object.values(selectedPlayers).map((player, index) => (
+                                <img className="selPlayers" key={index} src={player.photo} alt={player.name} />
                             ))}
                         </div>
                     </div>

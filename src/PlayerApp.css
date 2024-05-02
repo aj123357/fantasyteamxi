@@ -33,6 +33,11 @@
     color: #fff;
     cursor: pointer;
   }
+
+  .selPlayers{
+    width: 20vh;
+    height: 20vh;
+  }
   
   /* .pay-now:disabled {
     background-color: #ccc;
