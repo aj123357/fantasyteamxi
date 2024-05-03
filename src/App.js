@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css'; // Import CSS file for styling
 import Login from './Login';
 import PlayerApp from './PlayerApp'
-
-import { paymentPage } from './Constants';
+import axios from 'axios'
+import { host, paymentPage } from './Constants';
+import { fetchUser, fetchWalletAmount } from './utils/userUtil';
 
 const App = () => {
   const [topPerformers, setTopPerformers] = useState([]);
   const [selectedPerformer1, setSelectedPerformer1] = useState('');
   const [selectedPerformer2, setSelectedPerformer2] = useState('');
   const [userBet, setUserBet] = useState(0);
-  console.log(localStorage.getItem("user"));
   // Function to handle user's selection of top performers
+
   const handleSelection = (performer) => {
     if (!selectedPerformer1) {
       setSelectedPerformer1(performer);
@@ -22,6 +23,14 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchUser2 = async (req, res) =>{
+      await fetchUser();
+    }
+
+    fetchUser2();
+  }, [])
+  console.log("localstoragr",localStorage.getItem("userDetails"));
   const placeBet = () => {
     // call
     // localStorage.clear()
@@ -44,16 +53,7 @@ const App = () => {
     const userWins = topPerformers.includes(selectedPerformer1) && topPerformers.includes(selectedPerformer2);
     alert(userWins ? 'Congratulations! You won!' : 'Better luck next time.');
   };
-  // console.log();
-  if ("userDetails" in localStorage){
-    console.log(true)
-    console.log(localStorage.getItem("userDetails") === undefined || localStorage.getItem("userDetails") === null);
-    console.log(localStorage.length);
 
-  }else {
-    console.log(false)
-
-  }
 
   const [loggedIn, setLoggedIn] = useState(!(localStorage.getItem("userDetails") === undefined || localStorage.getItem("userDetails") === null));
 
@@ -67,6 +67,9 @@ const App = () => {
        <li>Profile</li>
        <li>Home</li>
        <li>Transactions</li>
+       <li>Wallet {fetchWalletAmount()} </li>
+       <li><button onClick={() => console.log("withdraw")}>Withdraw Amount</button></li>
+       {/* // */}
        {loggedIn && <li><button onClick={() =>{localStorage.removeItem("userDetails"); setLoggedIn(false);}}>Logout</button></li>}
 
      </ul>
@@ -74,7 +77,6 @@ const App = () => {
    <img src= "iplsq.jpg" alt="IPL squad" /></div>
 
     <div className="app-container">
-   
       <div className="body-container">
         {!loggedIn ? <Login setLoggedIn={setLoggedIn} /> : <div>
       

@@ -9,18 +9,14 @@ const Login = ({ setLoggedIn }) => {
   const [showOtpSection, setShowOtpSection] = useState(false);
 
   const handleNext = () => {
-    // Simulated logic to send OTP to the mobile number
-    // For demonstration purposes, I'm assuming OTP is sent immediately
     setShowOtpSection(true);
   };
 
   const handleLogin = async () => {
-    // Simulated logic to verify OTP
-    // For demonstration purposes, I'm assuming OTP is correct if it's 123456
     try{
         const loginResponse = await axios.get(host + `login?email=${Email}&password=${otp}`);
         console.log("data",loginResponse);
-        localStorage.setItem("userDetails",JSON.stringify(loginResponse?.data?.user || undefined));
+        localStorage.setItem("userDetails",JSON.stringify(loginResponse?.data || undefined));
         setLoggedIn(true);
     } catch(e) {
         console.log("err", e);
@@ -32,7 +28,6 @@ const Login = ({ setLoggedIn }) => {
     <div className="login-container">
       <h2>Login</h2>
       <div>
-        {/* Mobile Number input */}
         {!showOtpSection && (
           <>
             <input
@@ -56,6 +51,7 @@ const Login = ({ setLoggedIn }) => {
             />
             
             <button onClick={async () => await handleLogin(Email, otp)}>Login</button>
+            <a href={`${host}passwordResetEmail`}>Forgot Password</a>
           </>
         )}
       </div>

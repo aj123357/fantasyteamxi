@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import './PlayerApp.css';
+import { matches, players } from './utils/gameUtil';
 
 const PlayerApp = () => {
     const [currentMatch, setCurrentMatch] = useState(null);
@@ -8,33 +9,15 @@ const PlayerApp = () => {
     const [selectedTeamAPlayers, setSelectedTeamAPlayers] = useState([]); 
 
     // Simulated data for IPL matches
-    const matches = [
-        {
-            date: '2024-05-02',
-            teams: ['Team A'],
-            players: {
-                'Team A': [
-                    { name: 'Player 1', photo: '/dhoni.png'},
-                    { name: 'Player 2', photo: '/patcummins.png'},
-                    { name: 'Player 3', photo: '/player3.jpg'},
-                    { name: 'Player 4', photo: '/player1.jpg'},
-                    { name: 'Player 5', photo: '/player2.jpg'},
-                    { name: 'Player 6', photo: '/player3.jpg'},
-                    { name: 'Player 7', photo: '/player1.jpg'}
-                    // Add more players...
-                ]
-            }
-        },
-    ];
 
     useEffect(() => {
         // Find today's match
         const today = new Date().toISOString().split('T')[0];
         const match = matches.find(match => match.date === today);
-        setCurrentMatch(match);
+        setCurrentMatch({...match, players: [...players[match.teams[0]], ...players[match.teams[1]]]});
     }, []);
 
-    const handlePlayerSelection = (team, player, position) => {
+    const handlePlayerSelection = (player, position) => {
         setSelectedPlayers({
             ...selectedPlayers,
             [position]: player
@@ -51,40 +34,34 @@ const PlayerApp = () => {
                 {currentMatch ? (
                     <div className="match-details">
                         <h2>Current IPL Match</h2>
-
-                        <div className="player-selection">
-                            {currentMatch.teams.map(team => (
-                                <div key={team} className="team-players">
-                                    <h3>{team}</h3>
-                                    <div className="dropdowns">
-                                        {[0, 1, 2].map(position => (
-                                            <div key={position} className="dropdown">
-                                                <label htmlFor={`${team}-position-${position}`}>Select player #{position}:</label>
-                                                <select
-                                                    id={`${team}-position-${position}`}
-                                                    onChange={e => handlePlayerSelection(team, currentMatch.players[team][parseInt(e.target.value)], position)}
-                                                    value={selectedPlayers[position]?.name || ''}
-                                                >
-                                                    <option value="">
-                                                        {selectedPlayers[position]?.name || "Select a Player"}
-                                                    </option>
-                                                    {currentMatch.players[team].map((player, index) => (
-                                                        <option key={index} value={index} disabled={Object.values(selectedPlayers).some(selected => selected && selected.name === player.name)}>
-                                                            {player.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
+                        <div className="dropdowns">
+                            {[0, 1, 2].map(position => (
+                                <div key={position} className="dropdown">
+                                    <label htmlFor={`position-${position}`}>Select player #{position}:</label>
+                                    <select
+                                        id={`position-${position}`}
+                                        onChange={e => handlePlayerSelection(currentMatch.players[parseInt(e.target.value)], position)}
+                                        value={selectedPlayers[position]?.name || ''}
+                                    >
+                                        <option value="">
+                                            {selectedPlayers[position]?.name || "Select a Player"}
+                                        </option>
+                                        {currentMatch.players.map((player, index) => (
+                                            <option key={index} value={index} disabled={Object.values(selectedPlayers).some(selected => selected && selected.name === player.name)}>
+                                                {player.name}
+                                            </option>
                                         ))}
-                                    </div>
+                                    </select>
                                 </div>
                             ))}
                         </div>
+                       
                         <div className="selected-players">
                             {Object.values(selectedPlayers).map((player, index) => (
                                 <img className="selPlayers" key={index} src={player.photo} alt={player.name} />
                             ))}
                         </div>
+                        
                     </div>
                 ) : (
                     <p>No match scheduled for today</p>
