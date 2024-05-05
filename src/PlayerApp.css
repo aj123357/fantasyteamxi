@@ -39,8 +39,9 @@
     height: 20vh;
   }
   
-  /* .pay-now:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  } */
-  
+  button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}

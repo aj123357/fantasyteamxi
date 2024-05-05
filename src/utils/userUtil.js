@@ -3,8 +3,6 @@ import { host } from '../Constants';
 
 
 export const fetchUser = async () => {
-    console.log("id")
-
     if (localStorage.length < 1 || localStorage.getItem("userDetails") === undefined || 
     localStorage.getItem("userDetails") === null) {
         return null;
@@ -13,19 +11,38 @@ export const fetchUser = async () => {
     try {
 
         const id = JSON.parse( localStorage.getItem("userDetails") ).id;
-        console.log("id", id)
 
         if (id === undefined || id === null)
             return null;
-        console.log("id", id)
         const data = await axios.get(`${host}fetchUser?id=${id}`)
-        console.log(data);
-        localStorage.setItem("userDetails", JSON.stringify(data))
+        localStorage.setItem("userDetails", JSON.stringify(data.data))
     } catch(err) {
         console.log("err", err)
         return undefined;
     }
 
+}
+
+export const insertOrderToDb = async (orderId, selectedPlayers) => {
+    if (localStorage.length < 1 || localStorage.getItem("userDetails") === undefined || 
+    localStorage.getItem("userDetails") === null) {
+        return null;
+    }
+    try {
+
+        const id = JSON.parse( localStorage.getItem("userDetails") ).id;
+
+        if (id === undefined || id === null) {
+            localStorage.clear();
+            return null;
+        }
+        const data = await axios.post(`${host}insertOrderId?id=${id}&orderId=${orderId}`,{playerSelected: selectedPlayers})
+        console.log(data);
+        localStorage.setItem("userDetails", JSON.stringify(data.data))
+    } catch(err) {
+        console.log("err", err)
+        return undefined;
+    }
 }
 
 export const fetchWalletAmount = () => {
