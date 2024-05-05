@@ -33,7 +33,7 @@ export const Winners = (props) => {
           return transactionDate < todayStart;
     }
 
-    return <div>
+    return <div style={{ display: "flex", margin: 2, borderStyle: "solid", alignItems: "center"}}>
             <div className="selected-players" style={{ display: 'flex'}}>
                 {Object.values(props.transaction.playerSelected).map((player, index) => (
                     <img className="selPlayers" key={index} src={player.photo} alt={player.name} />

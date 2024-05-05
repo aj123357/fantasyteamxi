@@ -36,6 +36,7 @@ const PlayerApp = () => {
 
         if (allTransactions === undefined || allTransactions.length === 0) {
             setCurrentTransactions([]);
+            return;
         }
         const today = new Date();
         const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -78,18 +79,19 @@ const PlayerApp = () => {
 
     const todaysMatchBanner = () => {
         return (
-            <section>
+            <section style={{ marginBottom: "2em"}}>
                 <h2>Today's Match</h2>
                 {/* Display today's match image */}
-                <div style={{'display':'flex'}}>
+                <div style={{ width: '20em', height: '10em' }}>
                     <div>
-                        <img className="team1" src="srh_logo.png" alt="SRH vs CSK" />
-                        <h4>{currentMatch.teams[0]}</h4>
+                        <img style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                         className="team1" src={currentMatch.matchBanner} alt="SRH vs CSK" />
+                        {/* <h4>{currentMatch.teams[0]}</h4> */}
                     </div> 
-                    <div> 
-                        <img className="team2" src="csk.png" alt="SRH vs CSK" />
+                    {/* <div> 
+                        <img className="team2" src={currentMatch.matchBanner} alt="SRH vs CSK" />
                         <h4>{currentMatch.teams[1]}</h4>
-                    </div>
+                    </div> */}
                 </div>
           </section>
         )
@@ -105,7 +107,7 @@ const PlayerApp = () => {
                             <h2>Bet on Top Performers</h2>
                             {[0, 1, 2].map(position => (
                                 <div key={position} className="dropdown">
-                                    <label htmlFor={`position-${position}`}>Select player #{position}:</label>
+                                    <label htmlFor={`position-${position}`}>Select Rank {position + 1} Dream11 Player:</label>
                                     <select
                                         id={`position-${position}`}
                                         onChange={e => handlePlayerSelection(currentMatch.players[parseInt(e.target.value)], position)}
@@ -131,12 +133,16 @@ const PlayerApp = () => {
                         </div>
                         <section>
                             {/* <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} /> */}
-                            <button disabled={selectedPlayers[2] === undefined} className='bet_btn' onClick={placeBet}>Place Bet</button>
+                            <button disabled={currentTransactions.length > 4 || 
+                            selectedPlayers[0] === undefined || selectedPlayers[1] === undefined || selectedPlayers[2] === undefined} 
+                            className='bet_btn' onClick={placeBet}>Place Bet</button>
                         </section>
                         {currentTransactions.length > 0 && (
-                            currentTransactions.map(transaction => 
+                            <div>
+                                Your Bets
+                            {currentTransactions.map(transaction => 
                                 <Winners transaction={transaction} selectedPlayers={selectedPlayers} currentMatch={currentMatch} />
-                            )
+                            )}</div>
                         )}
                      </div>
                 ) : (

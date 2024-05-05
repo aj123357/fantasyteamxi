@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import './App.css'; // Import CSS file for styling
 import axios from "axios";
 import { host } from './Constants';
+// import NotificationService from './service/NotificationService/NotificationService';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = ({ setLoggedIn }) => {
   const [Email, setEmail] = useState('');
@@ -20,7 +23,9 @@ const Login = ({ setLoggedIn }) => {
         setLoggedIn(true);
     } catch(e) {
         console.log("err", e);
-        alert('Invalid Password. Please try again.');
+        toast.error("Something Went Wrong !", {
+          position: "top-right"
+        });
     }
   };
 

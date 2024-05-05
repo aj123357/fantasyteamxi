@@ -5,7 +5,7 @@ import PlayerApp from './PlayerApp'
 import axios from 'axios'
 import { host, paymentPage } from './Constants';
 import { fetchUser, fetchWalletAmount } from './utils/userUtil';
-import { Winners } from './Winners';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const [topPerformers, setTopPerformers] = useState([]);
@@ -52,7 +52,7 @@ const App = () => {
        <li>Home</li>
        <li>Transactions</li>
        <li>Wallet {fetchWalletAmount()} </li>
-       <li><button onClick={() => console.log("withdraw")}>Withdraw Amount</button></li>
+       <li><button disabled={fetchWalletAmount() === 0} onClick={() => console.log("withdraw")}>Withdraw Amount</button></li>
        {loggedIn && <li><button onClick={() =>{localStorage.removeItem("userDetails"); setLoggedIn(false);}}>Logout</button></li>}
 
      </ul>
@@ -60,15 +60,12 @@ const App = () => {
    <img src= "iplsq.jpg" alt="IPL squad" /></div>
 
     <div className="app-container">
-      <div className="body-container">
-        {!loggedIn ? <Login setLoggedIn={setLoggedIn} /> : <div>
-      
-
-          {/* Body */}
-          <div className="body-container">
+      <div>
+        {!loggedIn ? <Login setLoggedIn={setLoggedIn} /> : 
+          <div >
+            <h1>Hi {JSON.parse(localStorage.getItem("userDetails"))?.username || "User"},</h1>
             <PlayerApp />
-          </div>
-        </div>}
+          </div>}
       </div>
      
     </div>
