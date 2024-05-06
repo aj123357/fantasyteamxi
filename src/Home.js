@@ -30,7 +30,6 @@ const Home = () => {
 
     initializeData();
   }, []);
-  console.log("localstoragr", localStorage.getItem("userDetails"));
 
   return (
     <>

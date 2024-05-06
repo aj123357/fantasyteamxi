@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import './App.css'; // Import CSS file for styling
+import React, { useState } from "react";
+import "./App.css"; // Import CSS file for styling
 import axios from "axios";
-import { host } from './Constants';
+import { host } from "./Constants";
 // import NotificationService from './service/NotificationService/NotificationService';
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Login.css"
+import "./Login.css";
 
 const Login = ({ setLoggedIn }) => {
-  const [Email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
+  const [Email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
   const [showOtpSection, setShowOtpSection] = useState(false);
 
   const handleNext = () => {
@@ -17,23 +17,28 @@ const Login = ({ setLoggedIn }) => {
   };
 
   const handleLogin = async () => {
-    try{
-        const loginResponse = await axios.get(host + `login?email=${Email}&password=${otp}`);
-        console.log("data",loginResponse);
-        localStorage.setItem("userDetails",JSON.stringify(loginResponse?.data || undefined));
-        setLoggedIn(true);
-    } catch(e) {
-        console.log("err", e);
-        toast.error("Something Went Wrong !", {
-          position: "top-right"
-        });
+    try {
+      const loginResponse = await axios.get(
+        host + `login?email=${Email}&password=${otp}`
+      );
+      console.log("data", loginResponse);
+      localStorage.setItem(
+        "userDetails",
+        JSON.stringify(loginResponse?.data || undefined)
+      );
+      setLoggedIn(true);
+    } catch (e) {
+      console.log("err", e);
+      toast.error("Something Went Wrong !", {
+        position: "top-right",
+      });
     }
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
-      <div className='login-box'>
+      <div className="login-box">
         {!showOtpSection && (
           <>
             <input
@@ -42,7 +47,9 @@ const Login = ({ setLoggedIn }) => {
               value={Email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button className='next-btn' onClick={handleNext}>Next</button>
+            <button className="next-btn" onClick={handleNext}>
+              Next
+            </button>
           </>
         )}
 
@@ -55,9 +62,19 @@ const Login = ({ setLoggedIn }) => {
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
-            
-            <button className="login-btn" onClick={async () => await handleLogin(Email, otp)}>Login</button>
-            <a className='forgot-btn' href={`${host}passwordResetEmail`}>Forgot Password</a>
+
+            <button
+              className="login-btn"
+              onClick={async () => await handleLogin(Email, otp)}
+            >
+              Login
+            </button>
+            <a
+              className="forgot-btn"
+              href={`${host}passwordResetEmail?email=${Email}`}
+            >
+              Forgot Password
+            </a>
           </>
         )}
       </div>

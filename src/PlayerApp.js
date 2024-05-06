@@ -4,7 +4,7 @@ import "./PlayerApp.css";
 import { matches, players } from "./utils/gameUtil";
 import { paymentPage, paymentPageFields } from "./Constants";
 import { createOrderId } from "./utils/dbUtil";
-import { insertOrderToDb } from "./utils/userUtil";
+import { fetchMatches, insertOrderToDb } from "./utils/userUtil";
 import { Winners } from "./Bets";
 
 const PlayerApp = () => {
@@ -49,23 +49,30 @@ const PlayerApp = () => {
 
   useEffect(() => {
     // Find today's match
-    const today = new Date().toISOString().split("T")[0];
-    const allMatches = JSON.parse(localStorage.getItem("matches"));
-    console.log("today", today);
-    const match = allMatches.find((match) => match.date === today);
-    console.log("match", match);
-    if (match === undefined) {
-      console.log("undefineddddd");
-      setCurrentMatch({ players: [] });
-    } else
-      setCurrentMatch({
-        ...match,
-        players: [
-          ...players[match.teams[0]].teamPlayers,
-          ...players[match.teams[1]].teamPlayers,
-        ],
-      });
-    fetchCurrentTransactions();
+    const fetchMatchData = async () => {
+      const today = new Date().toISOString().split("T")[0];
+      let allMatches = JSON.parse(localStorage.getItem("matches"));
+      console.log("today", today, allMatches);
+      if (allMatches === null || allMatches === undefined) {
+        await fetchMatches();
+        allMatches = JSON.parse(localStorage.getItem("matches"));
+      }
+      const match = allMatches.find((match) => match.date === today);
+      console.log("match", match);
+      if (match === undefined) {
+        console.log("undefineddddd");
+        setCurrentMatch({ players: [] });
+      } else
+        setCurrentMatch({
+          ...match,
+          players: [
+            ...players[match.teams[0]].teamPlayers,
+            ...players[match.teams[1]].teamPlayers,
+          ],
+        });
+      fetchCurrentTransactions();
+    };
+    fetchMatchData();
   }, []);
 
   const placeBet = async () => {
