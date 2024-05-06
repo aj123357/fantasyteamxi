@@ -1,0 +1,26 @@
+.nav_cont ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; 
+  }
+  
+  .nav_cont li {
+    margin-right: 10px; 
+  }
+  
+  @media (max-width: 600px) {
+    .nav_cont li {
+     margin: auto;
+     color: #1f497d;
+     font-weight: 600;
+     text-decoration: none;
+  }
+
+  .navTxt{
+    color: #1f497d;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}

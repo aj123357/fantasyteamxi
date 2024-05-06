@@ -5,6 +5,7 @@ import { host } from './Constants';
 // import NotificationService from './service/NotificationService/NotificationService';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import "./Login.css"
 
 const Login = ({ setLoggedIn }) => {
   const [Email, setEmail] = useState('');
@@ -32,7 +33,7 @@ const Login = ({ setLoggedIn }) => {
   return (
     <div className="login-container">
       <h2>Login</h2>
-      <div>
+      <div className='login-box'>
         {!showOtpSection && (
           <>
             <input
@@ -41,7 +42,7 @@ const Login = ({ setLoggedIn }) => {
               value={Email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button onClick={handleNext}>Next</button>
+            <button className='next-btn' onClick={handleNext}>Next</button>
           </>
         )}
 
@@ -55,8 +56,8 @@ const Login = ({ setLoggedIn }) => {
               onChange={(e) => setOtp(e.target.value)}
             />
             
-            <button onClick={async () => await handleLogin(Email, otp)}>Login</button>
-            <a href={`${host}passwordResetEmail`}>Forgot Password</a>
+            <button className="login-btn" onClick={async () => await handleLogin(Email, otp)}>Login</button>
+            <a className='forgot-btn' href={`${host}passwordResetEmail`}>Forgot Password</a>
           </>
         )}
       </div>

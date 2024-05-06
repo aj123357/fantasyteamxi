@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchWalletAmount } from "./utils/userUtil";
+import "./NavBar.css"
+
 
 const NavBar = ({ loggedIn, setLoggedIn }) => {
   return (
@@ -10,21 +11,13 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
           <img className="ipl_logo" src="ipl_img.png" alt="IPL 2024" />
           <li>Profile</li>
           <li>
-            <Link to="/">Home</Link>
+            <Link className="navTxt" to="/">Home</Link>
           </li>
           <li>
-            <Link to="/bets">Your Bets</Link>
+            <Link className="navTxt" to="/bets">Your Bets</Link>
           </li>
           <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-          <li>
-            <button
-              disabled={fetchWalletAmount() === 0}
-              onClick={() => console.log("withdraw")}
-            >
-              Withdraw Amount
-            </button>
+            <Link className="navTxt" to="/contact">Contact</Link>
           </li>
           {loggedIn && (
             <li>

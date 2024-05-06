@@ -1,0 +1,20 @@
+.login-box{
+    width: 70%;
+}
+
+.login-container{
+    margin: 15px;
+}
+
+.next-btn{
+    border: 1px solid !important;
+}
+
+.forgot-btn{
+    color: black;
+    text-decoration: none;
+}
+
+.login-btn{
+    border: 1px solid !important;
+}
