@@ -49,6 +49,7 @@ body {
 .nav_cont {
   padding: 0px 5px 11px 10px;
   background-color: cornflowerblue;
+  display: flex;
 }
 
 .bet_btn {
