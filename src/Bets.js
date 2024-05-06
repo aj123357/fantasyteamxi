@@ -60,6 +60,9 @@ export const Bets = () => {
       ? "Congratulations! You won!"
       : "Ohh! You missed Rs 9,00,000 this time";
   };
+  const closeModal = () => {
+    setShowResult(false);
+  };
 
   const hasMatchEnded = (transaction) => {
     const today = new Date();
@@ -98,7 +101,13 @@ export const Bets = () => {
       ) : (
         <>
           <button onClick={() => setShowResult(true)}>Check Result</button>
-          {showResult && <WinnersTable matchId={transaction.matchId} />}
+          {showResult && transaction.matchId !== undefined && (
+            <WinnersTable
+              matchId={transaction.matchId}
+              isOpen={showResult}
+              onClose={closeModal}
+            />
+          )}
         </>
       )}
     </div>
