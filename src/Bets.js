@@ -74,7 +74,7 @@ export const Bets = () => {
     return transactionDate < todayStart;
   };
 
-  const showBet = (transaction, currentMatch) => (
+  const showBet = (transaction) => (
     <div
       style={{
         display: "flex",
@@ -96,7 +96,10 @@ export const Bets = () => {
       {hasMatchEnded(transaction) ? (
         "Match is in Progress"
       ) : (
-        <button onClick={() => setShowResult(true)}>Check Result</button>
+        <>
+          <button onClick={() => setShowResult(true)}>Check Result</button>
+          {showResult && <WinnersTable matchId={transaction.matchId} />}
+        </>
       )}
     </div>
   );
@@ -109,7 +112,6 @@ export const Bets = () => {
           {currentTransactions.map((transaction) => showBet(transaction))}
         </div>
       )}
-      {showResult && <WinnersTable />}
     </>
   );
 };

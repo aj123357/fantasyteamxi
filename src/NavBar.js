@@ -9,7 +9,6 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
       <nav className="nav_cont">
         <ul>
           <img className="ipl_logo" src="ipl_img.png" alt="IPL 2024" />
-          <li>Profile</li>
           <li>
             <Link className="navTxt" to="/">Home</Link>
           </li>
