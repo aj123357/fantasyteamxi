@@ -19,7 +19,6 @@ const PlayerApp = () => {
     const allTransactions = JSON.parse(
       localStorage.getItem("userDetails")
     ).transactions;
-    console.log("hereeeee", allTransactions);
 
     if (allTransactions === undefined || allTransactions.length === 0) {
       setCurrentTransactions([]);
@@ -36,9 +35,6 @@ const PlayerApp = () => {
     console.log("todayEnd", todayEnd);
 
     const currentTransactions = allTransactions.filter((transaction) => {
-      // const transactionDate = new Date(transaction.created_at.seconds * 1000); // Convert epoch date to milliseconds
-      // console.log("transactionDate", transactionDate)
-
       return (
         // transactionDate >= todayStart &&
         // transactionDate < todayEnd &&
@@ -60,10 +56,12 @@ const PlayerApp = () => {
         await fetchMatches();
         allMatches = JSON.parse(localStorage.getItem("matches"));
       }
-      const match = allMatches.find((match) => match.date === today);
+      const match = allMatches.find(
+        (match) => match.date === today && match.winners.length === 0
+      );
+
       console.log("match", match);
       if (match === undefined) {
-        console.log("undefineddddd");
         setCurrentMatch({ players: [] });
       } else
         setCurrentMatch({
@@ -215,14 +213,19 @@ const PlayerApp = () => {
               ))}
             </div>
 
-            <div className="selected-players">
+            <div
+              className="selected-players"
+              style={{ display: "flex", justifyContent: "space-evenly" }}
+            >
               {Object.values(selectedPlayers).map((player, index) => (
-                <img
-                  className="selPlayers"
-                  key={index}
-                  src={player.photo}
-                  alt={player.name}
-                />
+                <div key={index} style={{ display: "block" }}>
+                  <img
+                    className="selPlayers"
+                    src={player.photo}
+                    alt={player.name}
+                  />
+                  <div>{player.name}</div>
+                </div>
               ))}
             </div>
             <section>

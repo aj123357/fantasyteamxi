@@ -81,38 +81,51 @@ export const Bets = () => {
     <div
       style={{
         display: "flex",
+        justifyContent: "space-evenly",
         margin: 2,
         borderStyle: "solid",
         alignItems: "center",
       }}
     >
-      <div className="selected-players" style={{ display: "flex" }}>
+      <div
+        className="selected-players"
+        style={{
+          display: "flex",
+          width: "50%",
+          justifyContent: "space-around",
+        }}
+      >
         {Object.values(transaction.playerSelected).map((player, index) => (
-          <img
-            className="selPlayers"
-            key={index}
-            src={player.photo}
-            alt={player.name}
-          />
+          <div key={index} style={{ display: "block", marginRight: 4 }}>
+            <img className="selPlayers" src={player.photo} alt={player.name} />
+            <div>{player.name}</div>
+          </div>
         ))}
       </div>
-      {hasMatchEnded(transaction) ? (
-        "Match is in Progress"
-      ) : (
-        <>
-          <button onClick={() => setShowResult(true)}>Check Result</button>
-          {showResult && transaction.matchId !== undefined && (
-            <WinnersTable
-              matchId={transaction.matchId}
-              isOpen={showResult}
-              onClose={closeModal}
-            />
-          )}
-        </>
-      )}
+      <div>
+        {hasMatchEnded(transaction) ? (
+          "Match is in Progress"
+        ) : (
+          <div>
+            <button
+              style={{ border: "solid" }}
+              onClick={() => setShowResult(true)}
+            >
+              Check Result
+            </button>
+            {showResult && transaction.matchId !== undefined && (
+              <WinnersTable
+                matchId={transaction.matchId}
+                isOpen={showResult}
+                onClose={closeModal}
+              />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
-  // endMatchResult(transaction, currentMatch)}
+
   return (
     <>
       {currentTransactions.length > 0 && (
