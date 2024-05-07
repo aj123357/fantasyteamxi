@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { host } from "./Constants";
+import { host } from "../utils/Constants";
 
 const WinnersTable = ({ matchId, isOpen, onClose }) => {
   const [winnersList, setWinnersList] = useState([]);

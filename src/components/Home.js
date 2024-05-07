@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./App.css"; // Import CSS file for styling
-import Login from "./Login";
+import "../App.css"; // Import CSS file for styling
 import PlayerApp from "./PlayerApp";
-import axios from "axios";
-import { fetchMatches, fetchUser, fetchWalletAmount } from "./utils/userUtil";
+import { fetchMatches, fetchUser, fetchWalletAmount } from "../utils/userUtil";
 
 const Home = () => {
   const [topPerformers, setTopPerformers] = useState([]);

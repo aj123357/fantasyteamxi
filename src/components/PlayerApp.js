@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import "./PlayerApp.css";
-import { matches, players } from "./utils/gameUtil";
-import { paymentPage, paymentPageFields } from "./Constants";
-import { createOrderId } from "./utils/dbUtil";
-import { fetchMatches, insertOrderToDb } from "./utils/userUtil";
-import { Winners } from "./Bets";
+import "../App.css";
+import "../styles/PlayerApp.css";
+import { matches, players } from "../utils/gameUtil";
+import { paymentPage, paymentPageFields } from "../utils/Constants";
+import { createOrderId } from "../utils/dbUtil";
+import { fetchMatches, insertOrderToDb } from "../utils/userUtil";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PlayerApp = () => {
-  const [currentMatch, setCurrentMatch] = useState(null);
+  const [currentMatch, setCurrentMatch] = useState({});
   const [selectedPlayers, setSelectedPlayers] = useState({});
   const [selectedTeamAPlayers, setSelectedTeamAPlayers] = useState([]);
   const [currentTransactions, setCurrentTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchCurrentTransactions = () => {
+  const fetchCurrentMatchTransactions = () => {
     const allTransactions = JSON.parse(
       localStorage.getItem("userDetails")
     ).transactions;
@@ -34,16 +36,17 @@ const PlayerApp = () => {
     console.log("todayEnd", todayEnd);
 
     const currentTransactions = allTransactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.created_at.seconds * 1000); // Convert epoch date to milliseconds
+      // const transactionDate = new Date(transaction.created_at.seconds * 1000); // Convert epoch date to milliseconds
       // console.log("transactionDate", transactionDate)
 
       return (
-        transactionDate >= todayStart &&
-        transactionDate < todayEnd &&
-        transaction.status === "captured"
+        // transactionDate >= todayStart &&
+        // transactionDate < todayEnd &&
+        transaction?.matchId === currentMatch.id &&
+        transaction?.status === "captured"
       );
     });
-    // console.log("currentTransactions", currentTransactions)
+    console.log("currentTransactions", currentTransactions);
     setCurrentTransactions(currentTransactions);
   };
 
@@ -70,20 +73,61 @@ const PlayerApp = () => {
             ...players[match.teams[1]].teamPlayers,
           ],
         });
-      fetchCurrentTransactions();
+      fetchCurrentMatchTransactions();
+      setIsLoading(false);
     };
     fetchMatchData();
   }, []);
 
+  const matchHasStarted = () => {
+    const dateIST = new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata",
+    });
+    const dateObject = new Date(dateIST);
+    const hours = dateObject.getHours();
+    const minutes = dateObject.getMinutes();
+    console.log(
+      "current macth hasmatchStarted",
+      currentMatch?.startTime?.split(":"),
+      hours,
+      minutes
+    );
+    return (
+      parseInt(currentMatch?.startTime?.split(":")[0]) <= hours ||
+      (parseInt(currentMatch?.startTime?.split(":")[0]) <= hours &&
+        parseInt(currentMatch?.startTime?.split(":")[1]) <= minutes)
+    );
+  };
+
+  const isPlaceBetDisabled = () => {
+    return (
+      matchHasStarted() ||
+      currentTransactions.length > 4 ||
+      selectedPlayers[0] === undefined ||
+      selectedPlayers[1] === undefined ||
+      selectedPlayers[2] === undefined
+    );
+  };
+
   const placeBet = async () => {
     // call
-    const orderId = createOrderId();
-    await insertOrderToDb(orderId, selectedPlayers, currentMatch.id);
-    console.log(localStorage.length, localStorage.getItem("userDetails"));
-    console.log("result", JSON.parse(localStorage.getItem("userDetails")));
-    window.location.href = `${paymentPage}?email=${
-      JSON.parse(localStorage.getItem("userDetails"))?.email || ""
-    }&${paymentPageFields.orderId}=${orderId}`;
+    if (isPlaceBetDisabled()) {
+      matchHasStarted()
+        ? toast.error("Match has already started. No more Bets !", {
+            position: "top-right",
+          })
+        : toast.error("You have reached maximum bets limit for this match !", {
+            position: "top-right",
+          });
+    } else {
+      const orderId = createOrderId();
+      await insertOrderToDb(orderId, selectedPlayers, currentMatch.id);
+      console.log(localStorage.length, localStorage.getItem("userDetails"));
+      console.log("result", JSON.parse(localStorage.getItem("userDetails")));
+      window.location.href = `${paymentPage}?email=${
+        JSON.parse(localStorage.getItem("userDetails"))?.email || ""
+      }&${paymentPageFields.orderId}=${orderId}`;
+    }
   };
 
   const handlePlayerSelection = (player, position) => {
@@ -110,16 +154,15 @@ const PlayerApp = () => {
               src={currentMatch.matchBanner}
               alt="SRH vs CSK"
             />
-            {/* <h4>{currentMatch.teams[0]}</h4> */}
           </div>
-          {/* <div> 
-                        <img className="team2" src={currentMatch.matchBanner} alt="SRH vs CSK" />
-                        <h4>{currentMatch.teams[1]}</h4>
-                    </div> */}
         </div>
       </section>
     );
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Render loading indicator while data is being fetched
+  }
 
   return (
     <div className="app">
@@ -185,12 +228,7 @@ const PlayerApp = () => {
             <section>
               {/* <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} /> */}
               <button
-                disabled={
-                  currentTransactions.length > 4 ||
-                  selectedPlayers[0] === undefined ||
-                  selectedPlayers[1] === undefined ||
-                  selectedPlayers[2] === undefined
-                }
+                // disabled={isPlaceBetDisabled()}
                 className="bet_btn"
                 onClick={placeBet}
               >

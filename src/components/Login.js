@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import "./App.css"; // Import CSS file for styling
+import "../App.css"; // Import CSS file for styling
 import axios from "axios";
-import { host } from "./Constants";
+import { host } from "../utils/Constants";
 // import NotificationService from './service/NotificationService/NotificationService';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Login.css";
+import "../styles/Login.css";
+import Loader from "./common/Loader";
 
 const Login = ({ setLoggedIn }) => {
   const [Email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [showOtpSection, setShowOtpSection] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNext = () => {
     setShowOtpSection(true);
@@ -18,6 +20,7 @@ const Login = ({ setLoggedIn }) => {
 
   const handleLogin = async () => {
     try {
+      setIsLoading(true);
       const loginResponse = await axios.get(
         host + `login?email=${Email}&password=${otp}`
       );
@@ -27,11 +30,13 @@ const Login = ({ setLoggedIn }) => {
         JSON.stringify(loginResponse?.data || undefined)
       );
       setLoggedIn(true);
+      setIsLoading(false);
     } catch (e) {
       console.log("err", e);
       toast.error("Something Went Wrong !", {
         position: "top-right",
       });
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +72,7 @@ const Login = ({ setLoggedIn }) => {
               className="login-btn"
               onClick={async () => await handleLogin(Email, otp)}
             >
-              Login
+              <div>Login {isLoading && <Loader />}</div>
             </button>
             <a
               className="forgot-btn"

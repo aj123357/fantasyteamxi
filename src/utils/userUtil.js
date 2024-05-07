@@ -1,5 +1,5 @@
 import axios from "axios";
-import { host } from "../Constants";
+import { host } from "./Constants";
 
 export const fetchUser = async () => {
   if (
