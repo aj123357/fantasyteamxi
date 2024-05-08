@@ -91,8 +91,8 @@ const PlayerApp = () => {
       minutes
     );
     return (
-      parseInt(currentMatch?.startTime?.split(":")[0]) <= hours ||
-      (parseInt(currentMatch?.startTime?.split(":")[0]) <= hours &&
+      parseInt(currentMatch?.startTime?.split(":")[0]) < hours ||
+      (parseInt(currentMatch?.startTime?.split(":")[0]) === hours &&
         parseInt(currentMatch?.startTime?.split(":")[1]) <= minutes)
     );
   };
