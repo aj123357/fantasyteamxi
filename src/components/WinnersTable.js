@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { host } from "../utils/Constants";
+import "../styles/WinnersTable.css";
 
-const WinnersTable = ({ matchId, isOpen, onClose }) => {
+const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
   const [winnersList, setWinnersList] = useState([]);
 
   useEffect(() => {
     const fetchAllWinners = async () => {
-      let data = [];
       if (matchId === undefined || winnersList.length > 0) {
         setWinnersList([]);
         //   return winnersList;
@@ -27,49 +27,44 @@ const WinnersTable = ({ matchId, isOpen, onClose }) => {
 
           setWinnersList(match.winners);
         }
-        //   console.log("winnerlistt", data.data);
-        //   setWinnersList(data.data);
-        //   return data.data;
       }
     };
     fetchAllWinners();
   }, []);
 
-  //   fetchAllWinners();
   const modalStyle = {
     display: isOpen ? "block" : "none",
   };
   return (
-    <div className="modal" style={modalStyle}>
-      <div className="modal-content">
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <span className="close" onClick={onClose}>
           &times;
         </span>
-        <h2>Winners Table</h2>
-        <div className="table-container"></div>
-        <table style={{ overflowY: "scroll" }}>
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Rank</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Name</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-                Winnings
-              </th>
-              {/* Add more table headers as needed */}
-            </tr>
-          </thead>
-          <tbody>
-            {winnersList.length > 0 &&
-              winnersList.map((winner, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{winner.username}</td>
-                  <td>{900000 / winnersList.length}</td>
-                  {/* Add more table cells for additional data */}
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="table-container">
+          <h1>{endMatchResult}</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Winnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Add table rows and data here */}
+              {winnersList.length > 0 &&
+                winnersList.map((winner, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{winner.username}</td>
+                    <td>{parseInt(900000 / winnersList.length)}</td>
+                    {/* Add more table cells for additional data */}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

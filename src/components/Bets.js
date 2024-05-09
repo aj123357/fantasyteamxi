@@ -1,84 +1,81 @@
 import React, { useEffect, useState } from "react";
 import WinnersTable from "./WinnersTable";
+import { fetchMatches } from "../utils/userUtil";
 
 export const Bets = () => {
   const [topPerformers, setTopPerformers] = useState([]);
   const [currentTransactions, setCurrentTransactions] = useState([]);
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState(-1);
+  // const [match, setMatch] = useState(null);
 
   useEffect(() => {
     fetchCurrentTransactions();
+    // fetchCurrentMatch();
   }, []);
-  const fetchCurrentTransactions = () => {
-    const allTransactions = JSON.parse(
-      localStorage.getItem("userDetails")
-    ).transactions;
-    console.log("hereeeee", allTransactions);
 
-    if (allTransactions === undefined || allTransactions.length === 0) {
-      setCurrentTransactions([]);
-      return;
-    }
-    const today = new Date();
-    const todayStart = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    );
-    const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000); // End of today
-    console.log("todaystart", todayStart);
-    console.log("todayEnd", todayEnd);
-
-    const currentTransactions = allTransactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.created_at.seconds * 1000); // Convert epoch date to milliseconds
-      // console.log("transactionDate", transactionDate)
-
-      return (
-        transactionDate >= todayStart &&
-        transactionDate < todayEnd &&
-        transaction.status === "captured"
+  const fetchCurrentMatch = (transaction) => {
+    let allMatches = JSON.parse(localStorage.getItem("matches"));
+    if (allMatches === null || allMatches === undefined) {
+      return undefined;
+    } else {
+      const currentMatch = allMatches.find(
+        (match) => match.id === transaction.matchId
       );
-    });
-    // console.log("currentTransactions", currentTransactions)
-    setCurrentTransactions(allTransactions);
+      return currentMatch;
+    }
   };
-  const endMatchResult = (transaction, currentMatch) => {
+
+  const fetchCurrentTransactions = () => {
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    if (userDetails === null || userDetails === undefined) {
+      setCurrentTransactions([]);
+    }
+    console.log("hereeeee", userDetails);
+
+    setCurrentTransactions(userDetails.transactions);
+  };
+  const endMatchResult = (transaction) => {
     // Simulated logic to determine top performers
     // const performers = ['Player1', 'Player2', 'player3']; // Replace with actual logic
-    const performers = currentMatch.topPerformers;
+    const match = fetchCurrentMatch(transaction);
+    if (match === undefined) {
+      return "";
+    }
+    const performers = match.topPerformers;
     if (performers.length !== 3) {
       return "";
     }
-    setTopPerformers(performers);
+    // console.log("fhbgfshbsifbs", performers, transaction.playerSelected[0]);
 
     // Simulated logic to determine if user wins
     const userWins =
-      topPerformers[0] === transaction.playerSelected[0] &&
-      topPerformers[1] === transaction.playerSelected[1] &&
-      topPerformers[2] === transaction.playerSelected[2];
-    return userWins
-      ? "Congratulations! You won!"
-      : "Ohh! You missed Rs 9,00,000 this time";
+      performers[0] === transaction.playerSelected[0].name &&
+      performers[1] === transaction.playerSelected[1].name &&
+      performers[2] === transaction.playerSelected[2].name;
+    return userWins ? (
+      <span style={{ color: "green" }}>Congratulations! You are a Winner</span>
+    ) : (
+      <span style={{ color: "brown" }}>
+        Ohh! You missed Rs 9,00,000 this time
+      </span>
+    );
   };
   const closeModal = () => {
-    setShowResult(false);
+    setShowResult(-1);
   };
 
   const hasMatchEnded = (transaction) => {
-    const today = new Date();
-    const todayStart = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    );
-    // const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000); // End of today
-
-    const transactionDate = new Date(transaction.created_at * 1000); // Convert epoch date to milliseconds
-    return transactionDate < todayStart;
+    const match = fetchCurrentMatch(transaction);
+    if (match === undefined) {
+      return "";
+    }
+    console.log("ankush", match, transaction.matchId);
+    return match?.topPerformers.length === 3;
   };
 
-  const showBet = (transaction) => (
+  const showBet = (transaction, index) => (
     <div
+      key={transaction.created_at.seconds}
       style={{
         display: "flex",
         justifyContent: "space-evenly",
@@ -102,24 +99,27 @@ export const Bets = () => {
           </div>
         ))}
       </div>
-      <div>
-        {hasMatchEnded(transaction) ? (
+      <div key={transaction.created_at.seconds}>
+        {!hasMatchEnded(transaction) ? (
           "Match is in Progress"
         ) : (
           <div>
             <button
               style={{ border: "solid" }}
-              onClick={() => setShowResult(true)}
+              onClick={() => setShowResult(index)}
             >
               Check Result
             </button>
-            {showResult && transaction.matchId !== undefined && (
-              <WinnersTable
-                matchId={transaction.matchId}
-                isOpen={showResult}
-                onClose={closeModal}
-              />
-            )}
+            {showResult !== -1 &&
+              showResult === index &&
+              transaction.matchId !== undefined && (
+                <WinnersTable
+                  matchId={transaction.matchId}
+                  isOpen={showResult}
+                  onClose={closeModal}
+                  endMatchResult={endMatchResult(transaction)}
+                />
+              )}
           </div>
         )}
       </div>
@@ -131,7 +131,9 @@ export const Bets = () => {
       {currentTransactions.length > 0 && (
         <div>
           <h1>Your Bets</h1>
-          {currentTransactions.map((transaction) => showBet(transaction))}
+          {currentTransactions.map((transaction, index) =>
+            showBet(transaction, index)
+          )}
         </div>
       )}
     </>
