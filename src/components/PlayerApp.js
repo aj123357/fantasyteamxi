@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import "../styles/PlayerApp.css";
 import { matches, players } from "../utils/gameUtil";
-import { paymentPage, paymentPageFields } from "../utils/Constants";
+import {
+  inMatchPaymentPage,
+  paymentPageFields,
+  preMatchPaymentPage,
+} from "../utils/Constants";
 import { createOrderId } from "../utils/dbUtil";
 import { fetchMatches, insertOrderToDb } from "../utils/userUtil";
 import { toast } from "react-toastify";
@@ -90,16 +94,26 @@ const PlayerApp = () => {
       hours,
       minutes
     );
-    return (
-      parseInt(currentMatch?.startTime?.split(":")[0]) < hours ||
-      (parseInt(currentMatch?.startTime?.split(":")[0]) === hours &&
+    if (
+      parseInt(currentMatch?.startTime?.split(":")[0]) + 1 < hours ||
+      (parseInt(currentMatch?.startTime?.split(":")[0]) + 1 === hours &&
         parseInt(currentMatch?.startTime?.split(":")[1]) <= minutes)
-    );
+    ) {
+      return "noBets";
+    } else if (
+      parseInt(currentMatch?.startTime?.split(":")[0]) > hours ||
+      (parseInt(currentMatch?.startTime?.split(":")[0]) === hours &&
+        parseInt(currentMatch?.startTime?.split(":")[1]) > minutes)
+    ) {
+      return "preMatch";
+    } else {
+      return "inMatch";
+    }
   };
 
   const isPlaceBetDisabled = () => {
     return (
-      // matchHasStarted() ||
+      matchHasStarted() === "noBets" ||
       currentTransactions.length > 4 ||
       selectedPlayers[0] === undefined ||
       selectedPlayers[1] === undefined ||
@@ -109,9 +123,10 @@ const PlayerApp = () => {
 
   const placeBet = async () => {
     // call
+    const matchStatus = matchHasStarted();
     if (isPlaceBetDisabled()) {
-      matchHasStarted()
-        ? toast.error("Match has already started. No more Bets !", {
+      matchStatus === "noBets"
+        ? toast.error("No more Bets !", {
             position: "top-right",
           })
         : toast.error("You have reached maximum bets limit for this match !", {
@@ -122,9 +137,11 @@ const PlayerApp = () => {
       await insertOrderToDb(orderId, selectedPlayers, currentMatch.id);
       console.log(localStorage.length, localStorage.getItem("userDetails"));
       console.log("result", JSON.parse(localStorage.getItem("userDetails")));
-      window.location.href = `${paymentPage}?email=${
-        JSON.parse(localStorage.getItem("userDetails"))?.email || ""
-      }&${paymentPageFields.orderId}=${orderId}`;
+      window.location.href = `${
+        matchStatus === "inMatch" ? inMatchPaymentPage : preMatchPaymentPage
+      }?email=${JSON.parse(localStorage.getItem("userDetails"))?.email || ""}&${
+        paymentPageFields.orderId
+      }=${orderId}`;
     }
   };
 
