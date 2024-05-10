@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/NavBar.css";
+import { fetchWalletAmount } from "../utils/userUtil";
 
 const NavBar = ({ loggedIn, setLoggedIn }) => {
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   return (
     <div>
       <nav className="nav_cont">
@@ -22,6 +24,26 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
             <Link className="navTxt" to="/contact">
               Contact
             </Link>
+          </li>
+          <li>
+            {fetchWalletAmount() !== 0 && (
+              <button
+                className="withdraw-btn"
+                style={{ border: "solid", backgroundColor: "green" }}
+                onClick={() => setShowWithdrawModal(!showWithdrawModal)}
+              >
+                Withdraw Amount {fetchWalletAmount()}
+              </button>
+            )}
+            {showWithdrawModal && (
+              <>
+                DM us on Instagram (
+                <a href="https://www.instagram.com/_happyinterest?igsh=MTE5eTc0NGh1bWgyZQ%3D%3D&utm_source=qr">
+                  HappyIntereset
+                </a>
+                ) for Your Winnings
+              </>
+            )}
           </li>
           {loggedIn && (
             <li>

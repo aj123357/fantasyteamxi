@@ -22,13 +22,6 @@ const App = () => {
         <Login setLoggedIn={setLoggedIn} />
       ) : (
         <>
-          <button
-            className="withdraw-btn"
-            disabled={fetchWalletAmount() === 0}
-            onClick={() => console.log("withdraw")}
-          >
-            Withdraw Amount
-          </button>
           <Routes>
             <Route path="/" element={<Home />} />
             {loggedIn && <Route path="/contact" element={<Contact />} />}

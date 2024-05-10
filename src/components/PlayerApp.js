@@ -99,7 +99,7 @@ const PlayerApp = () => {
 
   const isPlaceBetDisabled = () => {
     return (
-      matchHasStarted() ||
+      // matchHasStarted() ||
       currentTransactions.length > 4 ||
       selectedPlayers[0] === undefined ||
       selectedPlayers[1] === undefined ||
@@ -144,13 +144,27 @@ const PlayerApp = () => {
       <section style={{ marginBottom: "2em" }}>
         <h2>Today's Match</h2>
         {/* Display today's match image */}
-        <div style={{ width: "20em", height: "10em" }}>
-          <div>
+        <div style={{ width: "5em", height: "5em" }}>
+          <div
+            style={{ height: "100%", display: "flex", alignItems: "center" }}
+          >
             <img
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{
+                height: "100%",
+                width: "100%",
+                objectFit: "contain",
+                marginRight: "2em",
+              }}
               className="team1"
-              src={currentMatch.matchBanner}
-              alt="SRH vs CSK"
+              src={currentMatch.teams[0].toLowerCase() + ".png"}
+              alt={currentMatch.teams[0]}
+            />
+            <span style={{ marginRight: "2em" }}>vs</span>
+            <img
+              style={{ height: "100%", width: "100%", objectFit: "contain" }}
+              className="team1"
+              src={currentMatch.teams[1].toLowerCase() + ".png"}
+              alt={currentMatch.teams[1]}
             />
           </div>
         </div>

@@ -13,6 +13,20 @@ export const Bets = () => {
     // fetchCurrentMatch();
   }, []);
 
+  const showMatchDetails = (transaction) => {
+    const match = fetchCurrentMatch(transaction);
+    if (match === undefined) {
+      return "";
+    } else {
+      return (
+        <div>
+          <span>{match.teams[0] + "vs" + match.teams[1]}</span>
+          <span>{match.date}</span>
+        </div>
+      );
+    }
+  };
+
   const fetchCurrentMatch = (transaction) => {
     let allMatches = JSON.parse(localStorage.getItem("matches"));
     if (allMatches === null || allMatches === undefined) {
@@ -30,7 +44,7 @@ export const Bets = () => {
     if (userDetails === null || userDetails === undefined) {
       setCurrentTransactions([]);
     }
-    console.log("hereeeee", userDetails);
+    console.log("hereeeee", userDetails instanceof Object);
 
     setCurrentTransactions(userDetails.transactions);
   };
@@ -70,7 +84,7 @@ export const Bets = () => {
       return "";
     }
     console.log("ankush", match, transaction.matchId);
-    return match?.topPerformers.length === 3;
+    return match?.topPerformers?.length === 3 || false;
   };
 
   const showBet = (transaction, index) => (
@@ -92,6 +106,7 @@ export const Bets = () => {
           justifyContent: "space-around",
         }}
       >
+        {showMatchDetails(transaction)}
         {Object.values(transaction.playerSelected).map((player, index) => (
           <div key={index} style={{ display: "block", marginRight: 4 }}>
             <img className="selPlayers" src={player.photo} alt={player.name} />
@@ -128,7 +143,7 @@ export const Bets = () => {
 
   return (
     <>
-      {currentTransactions.length > 0 && (
+      {currentTransactions !== undefined && currentTransactions.length > 0 && (
         <div>
           <h1>Your Bets</h1>
           {currentTransactions.map((transaction, index) =>
