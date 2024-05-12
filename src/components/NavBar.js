@@ -11,17 +11,25 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
         <ul>
           <img className="ipl_logo" src="ipl_img.png" alt="IPL 2024" />
           <li>
-            <Link className="navTxt" to="/">
+            <Link className="navTxt" to="/" style={{ textDecoration: "none" }}>
               Home
             </Link>
           </li>
           <li>
-            <Link className="navTxt" to="/bets">
+            <Link
+              className="navTxt"
+              style={{ textDecoration: "none" }}
+              to="/bets"
+            >
               Your Bets
             </Link>
           </li>
           <li>
-            <Link className="navTxt" to="/contact">
+            <Link
+              className="navTxt"
+              style={{ textDecoration: "none" }}
+              to="/contact"
+            >
               Contact
             </Link>
           </li>
@@ -49,7 +57,7 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
             <li>
               <button
                 onClick={() => {
-                  localStorage.removeItem("userDetails");
+                  localStorage.clear();
                   setLoggedIn(false);
                 }}
               >
