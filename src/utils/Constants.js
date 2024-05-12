@@ -1,4 +1,4 @@
-export const host = window.location.href.includes("localhost")
+export const host = !window.location.href.includes("localhost")
   ? "http://localhost:5008/v1/"
   : "https://fantasyteam-api.vercel.app/v1/";
 

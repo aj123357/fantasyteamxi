@@ -46,3 +46,48 @@ button[disabled]{
   background-color: #cccccc;
   color: #666666;
 }
+
+@media (max-width:700px) {
+  .matchprogress{
+    border: none;
+    color: rgb(108, 243, 108);
+    margin-right: 0px !important;
+    padding: 10px 9px
+  }
+  .chkresult{
+    margin-right: 0px !important;
+    padding: 7px 7px !important
+  }
+
+  .teamplayed{
+    min-width: 10vh;
+    font-size: 1.7vh;
+}
+.teamname {
+  text-align: inherit !important;
+  font-weight: 600;
+  color: #649FED;
+}
+.selPlayers {
+  max-width: 4vh;
+  min-width: 3vh;
+  min-height: 3vh;
+  max-height: 4vh;
+  margin-right: 10px;
+}
+}
+
+.teamname{
+  text-align: center;
+}
+
+.teamplayed{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+.plyrName{
+  font-size: 1vh;
+}
+
+

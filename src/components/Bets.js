@@ -19,9 +19,9 @@ export const Bets = () => {
       return "";
     } else {
       return (
-        <div>
-          <span>{match.teams[0] + "vs" + match.teams[1]}</span>
-          <span>{match.date}</span>
+        <div className="teamplayed">
+          <div className="teamname">{match.teams[0] + " vs " + match.teams[1]}</div>
+          <div className="matchdate">{match.date}</div>
         </div>
       );
     }
@@ -110,16 +110,21 @@ export const Bets = () => {
         {Object.values(transaction.playerSelected).map((player, index) => (
           <div key={index} style={{ display: "block", marginRight: 4 }}>
             <img className="selPlayers" src={player.photo} alt={player.name} />
-            <div>{player.name}</div>
+            <div className="plyrName">{player.name}</div>
           </div>
         ))}
       </div>
       <div key={transaction.created_at.seconds}>
         {!hasMatchEnded(transaction) ? (
-          "Match is in Progress"
+          <div>
+           <button className="matchprogress"
+         >
+           Match in progress
+         </button>
+         </div>
         ) : (
           <div>
-            <button
+            <button className="chkresult"
               style={{ border: "solid" }}
               onClick={() => setShowResult(index)}
             >
