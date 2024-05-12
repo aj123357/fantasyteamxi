@@ -18,6 +18,19 @@ const PlayerApp = () => {
   const [selectedTeamAPlayers, setSelectedTeamAPlayers] = useState([]);
   const [currentTransactions, setCurrentTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("userDetails")) || undefined
+  );
+
+  const fetchImages = () => {
+    return players.MI.teamPlayers.map((player) => {
+      const newTab = window.open(
+        `https://www.google.com/search?tbm=isch&q=${player.name} ipl`,
+        "_blank"
+      );
+      return <div>New tab will open shortly...</div>;
+    });
+  };
 
   const fetchCurrentMatchTransactions = () => {
     const allTransactions = JSON.parse(
@@ -274,6 +287,9 @@ const PlayerApp = () => {
           <p>No match scheduled for today</p>
         )}
       </div>
+      {user && user.email.includes("jindalsteeltraders") && (
+        <button onClick={() => fetchImages()}>fetch images</button>
+      )}
     </div>
   );
 };
