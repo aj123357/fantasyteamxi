@@ -125,27 +125,32 @@ const PlayerApp = () => {
   };
 
   const isPlaceBetDisabled = () => {
-    return (
-      matchHasStarted() === "noBets" ||
-      currentTransactions.length > 4 ||
-      selectedPlayers[0] === undefined ||
-      selectedPlayers[1] === undefined ||
-      selectedPlayers[2] === undefined
-    );
+    return matchHasStarted() === "noBets"
+      ? "No more Bets now !"
+      : currentTransactions.length > 4
+      ? "You have reached maximum bets limit for this match !"
+      : selectedPlayers[0] === undefined ||
+        selectedPlayers[1] === undefined ||
+        selectedPlayers[2] === undefined
+      ? "Please complete your selection"
+      : "false";
   };
 
   const placeBet = async () => {
-    // call
-    const matchStatus = matchHasStarted();
-    if (isPlaceBetDisabled()) {
-      matchStatus === "noBets"
-        ? toast.error("No more Bets !", {
-            position: "top-right",
-          })
-        : toast.error("You have reached maximum bets limit for this match !", {
-            position: "top-right",
-          });
+    const err = isPlaceBetDisabled();
+    if (err !== "false") {
+      toast.error(err, {
+        position: "top-right",
+      });
+      // matchStatus === "noBets"
+      //   ? toast.error("No more Bets !", {
+      //       position: "top-right",
+      //     })
+      //   : toast.error("You have reached maximum bets limit for this match !", {
+      //       position: "top-right",
+      //     });
     } else {
+      const matchStatus = matchHasStarted();
       const orderId = createOrderId();
       await insertOrderToDb(orderId, selectedPlayers, currentMatch.id);
       console.log(localStorage.length, localStorage.getItem("userDetails"));
@@ -274,11 +279,7 @@ const PlayerApp = () => {
             </div>
             <section>
               {/* <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} /> */}
-              <button
-                // disabled={isPlaceBetDisabled()}
-                className="bet_btn"
-                onClick={placeBet}
-              >
+              <button className="bet_btn" onClick={placeBet}>
                 Place Bet
               </button>
             </section>
