@@ -46,7 +46,9 @@ export const Bets = () => {
     }
     console.log("hereeeee", userDetails instanceof Object);
 
-    setCurrentTransactions(userDetails.transactions);
+    setCurrentTransactions(
+      userDetails.transactions.filter((trans) => trans.status === "captured")
+    );
   };
   const endMatchResult = (transaction) => {
     // Simulated logic to determine top performers

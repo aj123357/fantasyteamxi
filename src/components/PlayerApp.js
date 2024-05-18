@@ -287,7 +287,7 @@ const PlayerApp = () => {
           <p>No match scheduled for today</p>
         )}
       </div>
-      {user && user.email.includes("jindalsteeltraders") && (
+      {user && user.email && user.email.includes("jindalsteeltraders") && (
         <button onClick={() => fetchImages()}>fetch images</button>
       )}
     </div>

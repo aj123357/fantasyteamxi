@@ -57,7 +57,7 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
             <li>
               <button
                 onClick={() => {
-                  localStorage.removeItem("userDetails");
+                  localStorage.clear();
                   setLoggedIn(false);
                 }}
               >
