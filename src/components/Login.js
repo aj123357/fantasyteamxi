@@ -41,11 +41,11 @@ const Login = ({ setLoggedIn }) => {
       const loginResponse = await axios.get(
         host + `login?email=${Email}&password=${otp}`
       );
-      console.log("data", loginResponse);
-      // localStorage.setItem(
-      //   "userDetails",
-      //   JSON.stringify(loginResponse?.data || undefined)
-      // );
+      console.log("ankush login data", loginResponse);
+      localStorage.setItem(
+        "userDetails",
+        JSON.stringify(loginResponse?.data || undefined)
+      );
       setLoggedIn(true);
       setIsLoading(false);
     } catch (e) {
