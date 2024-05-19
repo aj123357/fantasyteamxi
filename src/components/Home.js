@@ -28,9 +28,12 @@ const Home = () => {
       await fetchMatches();
       setIsLoading(false);
     };
-    setIsLoading(true);
+
     if (localStorage.length === 0) {
+      setIsLoading(true);
       initializeData();
+    } else {
+      setIsLoading(false);
     }
   }, []);
   if (isLoading) {
@@ -45,7 +48,6 @@ const Home = () => {
             Hi,{" "}
             {JSON.parse(localStorage.getItem("userDetails"))?.username ||
               "User"}
-            
           </h3>
           <PlayerApp />
         </div>
