@@ -29,7 +29,9 @@ const Home = () => {
       setIsLoading(false);
     };
     setIsLoading(true);
-    initializeData();
+    if (localStorage.length === 0) {
+      initializeData();
+    }
   }, []);
   if (isLoading) {
     return <div>Loading...</div>; // Render loading indicator while data is being fetched
@@ -39,12 +41,12 @@ const Home = () => {
     <>
       <div className="app-container">
         <div>
-          <h1>
-            Hi{" "}
+          <h3>
+            Hi,{" "}
             {JSON.parse(localStorage.getItem("userDetails"))?.username ||
               "User"}
-            ,
-          </h1>
+            
+          </h3>
           <PlayerApp />
         </div>
       </div>

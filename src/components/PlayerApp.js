@@ -101,12 +101,7 @@ const PlayerApp = () => {
     const dateObject = new Date(dateIST);
     const hours = dateObject.getHours();
     const minutes = dateObject.getMinutes();
-    console.log(
-      "current macth hasmatchStarted",
-      currentMatch?.startTime?.split(":"),
-      hours,
-      minutes
-    );
+    
     if (
       parseInt(currentMatch?.startTime?.split(":")[0]) + 1 < hours ||
       (parseInt(currentMatch?.startTime?.split(":")[0]) + 1 === hours &&
@@ -207,6 +202,8 @@ const PlayerApp = () => {
     );
   };
 
+  const getBetPrice = matchHasStarted() === "preMatch" ? "10" : "1000"
+
   if (isLoading) {
     return <div>Loading...</div>; // Render loading indicator while data is being fetched
   }
@@ -278,9 +275,11 @@ const PlayerApp = () => {
               ))}
             </div>
             <section>
-              {/* <input type="number" value={userBet} onChange={(e) => handleBet(e.target.value)} /> */}
               <button className="bet_btn" onClick={placeBet}>
-                Place Bet
+                <div>
+                  <div style={{fontWeight:900, fontSize: '1.3em'}}>₹ {getBetPrice}</div>
+                  Place Bet 
+                </div>
               </button>
             </section>
           </div>

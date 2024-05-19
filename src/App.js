@@ -21,13 +21,13 @@ const App = () => {
       {!loggedIn ? (
         <Login setLoggedIn={setLoggedIn} />
       ) : (
-        <>
+        <div>
           <Routes>
             <Route path="/" element={<Home />} />
             {loggedIn && <Route path="/contact" element={<Contact />} />}
             {loggedIn && <Route path="/bets" element={<Bets />} />}
           </Routes>
-        </>
+        </div>
       )}
     </div>
   );

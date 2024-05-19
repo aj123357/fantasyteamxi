@@ -16,21 +16,21 @@ export const Bets = () => {
   const groupedTransactions = () => {
     if (currentTransactions !== undefined && currentTransactions.length > 0) {
 
-        return currentTransactions.reduce((groups, transaction) => {
-          const { matchId } = transaction;
-          if (matchId === undefined) {
-            return groups;
-          }
-          if (!groups[matchId]) {
-            groups[matchId] = [];
-          }
-          groups[matchId].push(transaction);
-          console.log("groups", groups)
+      return currentTransactions.reduce((groups, transaction) => {
+        const { matchId } = transaction;
+        if (matchId === undefined) {
           return groups;
-        }, {})
+        }
+        if (!groups[matchId]) {
+          groups[matchId] = [];
+        }
+        groups[matchId].push(transaction);
+        console.log("groups", groups)
+        return groups;
+      }, {})
     }
     return {};
-}
+  }
 
   const showMatchDetails = (transaction) => {
     console.log("insideshowmatch", transaction)
@@ -172,8 +172,9 @@ export const Bets = () => {
 
   const ShowBetgroup = (transactiongroup, index) => {
     console.log("transac", transactiongroup);
-    return <div className="betContainer" style={{ borderStyle: "solid" }} key={index}> <div className="matchHeader"> {showMatchDetails(transactiongroup[0])}
-      { <div className="resultContainer" key={transactiongroup[0].created_at.seconds}>
+    return <div className="betContainer" style={{ borderStyle: "solid" }} key={index}>
+      <div className="matchHeader"> {showMatchDetails(transactiongroup[0])}
+        <div className="resultContainer" key={transactiongroup[0].created_at.seconds}>
           {!hasMatchEnded(transactiongroup[0]) ? (
             <div>
               <button className="matchprogress"
@@ -202,8 +203,6 @@ export const Bets = () => {
             </div>
           )}
         </div>
-        
-      }
       </div>
       {transactiongroup.map((transaction) => {
         return <div
