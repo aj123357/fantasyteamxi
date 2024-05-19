@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { host } from "../utils/Constants";
 import "../styles/WinnersTable.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
   const [winnersList, setWinnersList] = useState([]);
@@ -46,7 +47,6 @@ const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
           <table>
             <thead>
               <tr>
-                <th>Rank</th>
                 <th>Name</th>
                 <th>Winnings</th>
               </tr>
@@ -56,7 +56,6 @@ const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
               {winnersList.length > 0 &&
                 winnersList.map((winner, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
                     <td>{winner.username}</td>
                     <td>{parseInt(900000 / winnersList.length)}</td>
                     {/* Add more table cells for additional data */}
