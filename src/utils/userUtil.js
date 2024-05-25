@@ -32,7 +32,12 @@ export const fetchMatches = async () => {
   }
 };
 
-export const insertOrderToDb = async (orderId, selectedPlayers, matchId) => {
+export const insertOrderToDb = async (
+  orderId,
+  selectedPlayers,
+  matchId,
+  eventName
+) => {
   if (
     localStorage.length < 1 ||
     localStorage.getItem("userDetails") === undefined ||
@@ -48,7 +53,7 @@ export const insertOrderToDb = async (orderId, selectedPlayers, matchId) => {
       return null;
     }
     const data = await axios.post(
-      `${host}insertOrderId?id=${id}&orderId=${orderId}&matchId=${matchId}`,
+      `${host}insertOrderId?id=${id}&orderId=${orderId}&matchId=${matchId}&eventname=${eventName}`,
       { playerSelected: selectedPlayers }
     );
     console.log(data);

@@ -1,3 +1,6 @@
+import Top2Performers from "../components/events/Top2Performers";
+import Top3Performers from "../components/events/Top3Performers";
+
 export const players = {
   SRH: {
     teamPlayers: [
@@ -744,5 +747,41 @@ export const players = {
       },
     ],
     logo: "",
+  },
+};
+
+export const eventsUtil = (currentMatch, currentTransactions, eventname) => {
+  const eventsMap = {
+    top_3_performers: {
+      component: (
+        <Top3Performers
+          currentMatch={currentMatch}
+          currentTransactions={currentTransactions}
+        />
+      ),
+      title: "Bet on Top 3 Performers",
+    },
+    top_2_performers: {
+      component: (
+        <Top2Performers
+          currentMatch={currentMatch}
+          currentTransactions={currentTransactions}
+        />
+      ),
+      title: "Bet on Top 2 Performers",
+    },
+  };
+
+  return eventsMap[eventname].component;
+};
+
+export const eventsMapUtil = {
+  top_3_performers: {
+    title: "Bet on Top 3 Performers",
+    prize_pool_size: 900000,
+  },
+  top_2_performers: {
+    title: "Bet on Top 2 Performers",
+    prize_pool_size: 100000,
   },
 };

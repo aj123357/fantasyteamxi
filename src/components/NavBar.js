@@ -9,7 +9,7 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
     <div>
       <nav className="nav_cont">
         <ul>
-          <img className="ipl_logo" src="ipl_img.png" alt="IPL 2024" />
+          <img className="ipl_logo" src="/ipl_img.png" alt="IPL 2024" />
           <li>
             <Link className="navTxt" to="/" style={{ textDecoration: "none" }}>
               Home
@@ -67,7 +67,7 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
           )}
         </ul>
       </nav>
-      <img src="iplsq.jpg" alt="IPL squad" />
+      <img src="/iplsq.jpg" alt="IPL squad" />
     </div>
   );
 };
