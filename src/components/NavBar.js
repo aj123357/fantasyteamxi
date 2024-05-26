@@ -37,7 +37,7 @@ const NavBar = ({ loggedIn, setLoggedIn }) => {
             {fetchWalletAmount() !== 0 && (
               <button
                 className="withdraw-btn"
-                style={{ border: "solid", backgroundColor: "green" }}
+                style={{ border: "solid" }}
                 onClick={() => setShowWithdrawModal(!showWithdrawModal)}
               >
                 Withdraw Amount {fetchWalletAmount()}

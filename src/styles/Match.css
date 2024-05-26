@@ -122,12 +122,14 @@ button[disabled] {
 }
 
 .accordion-title {
-  background-color: #0a0537;
+  background-color: #d0dbef;
   padding: 16px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 90%;
+  color:darkblue;
 }
 
 .accordion-title h3 {
@@ -137,5 +139,5 @@ button[disabled] {
 
 .accordion-content {
   padding: 16px;
-  background-color: #1e0440;
+  background-color: #1F497D;;
 }
