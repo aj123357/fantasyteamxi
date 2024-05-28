@@ -6,7 +6,11 @@ import Contact from "./components/Contact";
 import { Bets } from "./components/Bets";
 import NavBar from "./components/NavBar";
 import Login from "./components/Login";
-import { fetchWalletAmount } from "./utils/userUtil";
+// import { fetchWalletAmount } from "./utils/userUtil";
+// import PlayerApp from "./components/PlayerApp";
+import Match from "./components/Match";
+import PlayerApp from "./components/PlayerApp";
+import "./App.css";
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(
@@ -21,11 +25,12 @@ const App = () => {
       {!loggedIn ? (
         <Login setLoggedIn={setLoggedIn} />
       ) : (
-        <div>
+        <div className="app-container">
           <Routes>
             <Route path="/" element={<Home />} />
-            {loggedIn && <Route path="/contact" element={<Contact />} />}
-            {loggedIn && <Route path="/bets" element={<Bets />} />}
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/bets" element={<Bets />} />
+            <Route path="/match/:id" element={<Match />} />
           </Routes>
         </div>
       )}

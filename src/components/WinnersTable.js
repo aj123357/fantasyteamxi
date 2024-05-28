@@ -2,9 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { host } from "../utils/Constants";
 import "../styles/WinnersTable.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { eventsMapUtil } from "../utils/gameUtil";
 
-const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
+const WinnersTable = ({
+  matchId,
+  eventName,
+  isOpen,
+  onClose,
+  endMatchResult,
+}) => {
   const [winnersList, setWinnersList] = useState([]);
 
   useEffect(() => {
@@ -17,16 +24,22 @@ const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
 
         const match = allMatches.find((match) => match.id === matchId);
         console.log("today match.winners", match);
-        if (match.winners === undefined || match.winners.length === 0) {
-          console.log("matchiddd", matchId);
+        if (
+          match.winners === undefined ||
+          match.winners[eventName] === undefined ||
+          match.winners[eventName].length === 0
+        ) {
+          console.log("matchiddd", matchId, eventName);
           const response = await axios.get(
-            `${host}fetchAllWinners?matchId=${matchId}`
+            `${host}fetchAllWinners?matchId=${matchId}&eventName=${eventName}`
           );
+          console.log("matchiddd", response);
+
           setWinnersList(response.data);
         } else {
           console.log("hellooooooo", matchId);
 
-          setWinnersList(match.winners);
+          setWinnersList(match.winners[eventName]);
         }
       }
     };
@@ -57,7 +70,14 @@ const WinnersTable = ({ matchId, isOpen, onClose, endMatchResult }) => {
                 winnersList.map((winner, index) => (
                   <tr key={index}>
                     <td>{winner.username}</td>
-                    <td>{parseInt(900000 / winnersList.length)}</td>
+                    <td>
+                      {parseInt(
+                        eventName === undefined
+                          ? 900000
+                          : eventsMapUtil[eventName].prize_pool_size /
+                              winnersList.length
+                      )}
+                    </td>
                     {/* Add more table cells for additional data */}
                   </tr>
                 ))}

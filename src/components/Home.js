@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../App.css"; // Import CSS file for styling
 import PlayerApp from "./PlayerApp";
 import { fetchMatches, fetchUser, fetchWalletAmount } from "../utils/userUtil";
+import UpcomingMatches from "./UpcomingMatches";
 
 const Home = () => {
-  const [topPerformers, setTopPerformers] = useState([]);
   const [selectedPerformer1, setSelectedPerformer1] = useState("");
   const [selectedPerformer2, setSelectedPerformer2] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -24,16 +24,14 @@ const Home = () => {
 
   useEffect(() => {
     const initializeData = async (req, res) => {
-      await fetchUser();
+      if (localStorage.length === 0) {
+        await fetchUser();
+      }
       await fetchMatches();
       setIsLoading(false);
     };
-    if (localStorage.length === 0) {
-      setIsLoading(true);
-      initializeData();
-    } else {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    initializeData();
   }, []);
   if (isLoading) {
     return <div>Loading...</div>; // Render loading indicator while data is being fetched
@@ -48,7 +46,7 @@ const Home = () => {
             {JSON.parse(localStorage.getItem("userDetails"))?.username ||
               "User"}
           </h3>
-          <PlayerApp />
+          <UpcomingMatches />
         </div>
       </div>
     </>

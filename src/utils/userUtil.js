@@ -32,7 +32,27 @@ export const fetchMatches = async () => {
   }
 };
 
-export const insertOrderToDb = async (orderId, selectedPlayers, matchId) => {
+export const fetchMatchPlayers = async (teamNames) => {
+  try {
+    console.log("jindal", teamNames);
+    const data = await axios.get(`${host}fetchMatchPlayers`, {
+      params: { teams: teamNames },
+    });
+    console.log("fetchMatchPlayers", data);
+    return data.data;
+    // localStorage.setItem("matches", JSON.stringify(data.data));
+  } catch (err) {
+    console.log("err", err);
+    return [];
+  }
+};
+
+export const insertOrderToDb = async (
+  orderId,
+  selectedPlayers,
+  matchId,
+  eventName
+) => {
   if (
     localStorage.length < 1 ||
     localStorage.getItem("userDetails") === undefined ||
@@ -48,7 +68,7 @@ export const insertOrderToDb = async (orderId, selectedPlayers, matchId) => {
       return null;
     }
     const data = await axios.post(
-      `${host}insertOrderId?id=${id}&orderId=${orderId}&matchId=${matchId}`,
+      `${host}insertOrderId?id=${id}&orderId=${orderId}&matchId=${matchId}&eventname=${eventName}`,
       { playerSelected: selectedPlayers }
     );
     console.log(data);

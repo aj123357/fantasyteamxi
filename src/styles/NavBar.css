@@ -46,7 +46,11 @@
 
   .withdraw-btn{
     float: right;
-    color: #a0badb;  }
+    color: #a0badb;
+    color: white;
+    border: none !important
+    }
+
 
     .navTxt:hover{
         color: white;

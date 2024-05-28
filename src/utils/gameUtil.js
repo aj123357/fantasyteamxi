@@ -1,3 +1,6 @@
+import Top2Performers from "../components/events/Top2Performers";
+import Top3Performers from "../components/events/Top3Performers";
+
 export const players = {
   SRH: {
     teamPlayers: [
@@ -745,4 +748,61 @@ export const players = {
     ],
     logo: "",
   },
+};
+
+export const eventsUtil = (currentMatch, currentTransactions, eventname) => {
+  const eventsMap = {
+    top_3_performers: {
+      component: (
+        <Top3Performers
+          currentMatch={currentMatch}
+          currentTransactions={currentTransactions}
+        />
+      ),
+      title: "Bet on Top 3 Performers",
+    },
+    top_2_performers: {
+      component: (
+        <Top2Performers
+          currentMatch={currentMatch}
+          currentTransactions={currentTransactions}
+        />
+      ),
+      title: "Bet on Top 2 Performers",
+    },
+  };
+
+  return eventsMap[eventname].component;
+};
+
+export const eventsMapUtil = {
+  top_3_performers: {
+    title: "Bet on Top 3 Performers",
+    prize_pool_size: 900000,
+    numberOfWinners: 3,
+  },
+  top_2_performers: {
+    title: "Bet on Top 2 Performers",
+    prize_pool_size: 100000,
+    numberOfWinners: 2,
+  },
+};
+
+export const fetchEventWinner = (performers, transaction) => {
+  switch (transaction.eventName) {
+    case "top_3_performers":
+      return (
+        performers["top_3_performers"][0] ===
+          transaction.playerSelected[0].name &&
+        performers["top_3_performers"][1] ===
+          transaction.playerSelected[1].name &&
+        performers["top_3_performers"][2] === transaction.playerSelected[2].name
+      );
+    case "top_2_performers":
+      return (
+        performers["top_2_performers"][0] ===
+          transaction.playerSelected[0].name &&
+        performers["top_2_performers"][1] === transaction.playerSelected[1].name
+      );
+  }
 };

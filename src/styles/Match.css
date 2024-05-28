@@ -1,0 +1,143 @@
+.dropdown {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+select:hover,
+select:focus {
+  border-color: #007bff;
+}
+
+.pay-now {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.selPlayers {
+  width: 10vh;
+  height: 10vh;
+  margin-right: 10px;
+}
+
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
+@media (max-width: 700px) {
+  .matchHeader {
+    display: flex;
+    justify-content: space-around;
+  }
+  .betContainer {
+    margin-top: 2em;
+    /* margin-left: 1em; */
+    /* margin-bottom: 4em; */
+    /* margin-right: 1em; */
+    box-shadow: rgba(149, 157, 165, 0.2) 14px 19px 13px;
+  }
+  .matchprogress {
+    border: none;
+    color: rgb(108, 243, 108);
+    margin-right: 0px !important;
+    padding: 10px 9px;
+  }
+  .chkresult {
+    margin-right: 0px !important;
+    padding: 7px 7px !important;
+  }
+
+  .teamplayed {
+    min-width: 10vh;
+    font-size: 2vh;
+    font-weight: 700;
+  }
+  .teamname {
+    text-align: inherit !important;
+    font-weight: 600;
+    color: #649fed;
+  }
+  .selPlayers {
+    max-width: 4vh;
+    min-width: 3vh;
+    min-height: 3vh;
+    max-height: 4vh;
+    margin-right: 10px;
+  }
+}
+
+.teamname {
+  text-align: center;
+}
+.resultContainer {
+  margin-top: 10px;
+}
+.teamplayed {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+.plyrName {
+  font-size: 1.5vh;
+}
+
+.accordion {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-item {
+  border-bottom: 1px solid #9b2121;
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-title {
+  background-color: #d0dbef;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  color:darkblue;
+}
+
+.accordion-title h3 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+.accordion-content {
+  padding: 16px;
+  background-color: #1F497D;;
+}

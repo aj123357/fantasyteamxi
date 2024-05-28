@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import WinnersTable from "./WinnersTable";
-import { fetchMatches } from "../utils/userUtil";
+import { fetchMatches, fetchUser } from "../utils/userUtil";
+import { eventsMapUtil, fetchEventWinner } from "../utils/gameUtil";
 
 export const Bets = () => {
-  const [topPerformers, setTopPerformers] = useState([]);
   const [currentTransactions, setCurrentTransactions] = useState([]);
   const [showResult, setShowResult] = useState(-1);
+  const [isLoading, setIsLoading] = useState(true);
   // const [match, setMatch] = useState(null);
 
   useEffect(() => {
@@ -15,7 +16,6 @@ export const Bets = () => {
 
   const groupedTransactions = () => {
     if (currentTransactions !== undefined && currentTransactions.length > 0) {
-
       return currentTransactions.reduce((groups, transaction) => {
         const { matchId } = transaction;
         if (matchId === undefined) {
@@ -25,22 +25,24 @@ export const Bets = () => {
           groups[matchId] = [];
         }
         groups[matchId].push(transaction);
-        console.log("groups", groups)
+        console.log("groups", groups);
         return groups;
-      }, {})
+      }, {});
     }
     return {};
-  }
+  };
 
   const showMatchDetails = (transaction) => {
-    console.log("insideshowmatch", transaction)
+    console.log("insideshowmatch", transaction);
     const match = fetchCurrentMatch(transaction);
     if (match === undefined) {
       return "";
     } else {
       return (
         <div className="teamplayed">
-          <div className="teamname">{match.teams[0] + " vs " + match.teams[1]}</div>
+          <div className="teamname">
+            {match.teams[0] + " vs " + match.teams[1]}
+          </div>
           <div className="matchdate">{match.date}</div>
         </div>
       );
@@ -59,16 +61,22 @@ export const Bets = () => {
     }
   };
 
-  const fetchCurrentTransactions = () => {
+  const fetchCurrentTransactions = async () => {
     const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    setIsLoading(true);
     if (userDetails === null || userDetails === undefined) {
       setCurrentTransactions([]);
+    } else {
+      await fetchUser().then(() => {
+        setCurrentTransactions(
+          userDetails.transactions.filter(
+            (trans) => trans.status === "captured"
+          )
+        );
+        setIsLoading(false);
+      });
     }
     console.log("hereeeee", userDetails instanceof Object);
-
-    setCurrentTransactions(
-      userDetails.transactions.filter((trans) => trans.status === "captured")
-    );
   };
   const endMatchResult = (transaction) => {
     // Simulated logic to determine top performers
@@ -78,16 +86,16 @@ export const Bets = () => {
       return "";
     }
     const performers = match.topPerformers;
-    if (performers.length !== 3) {
+    if (Object.keys(performers).length === 0) {
       return "";
     }
     // console.log("fhbgfshbsifbs", performers, transaction.playerSelected[0]);
 
     // Simulated logic to determine if user wins
-    const userWins =
-      performers[0] === transaction.playerSelected[0].name &&
-      performers[1] === transaction.playerSelected[1].name &&
-      performers[2] === transaction.playerSelected[2].name;
+    const userWins = fetchEventWinner(performers, transaction);
+    // performers[0] === transaction.playerSelected[0].name &&
+    // performers[1] === transaction.playerSelected[1].name &&
+    // performers[2] === transaction.playerSelected[2].name;
     return userWins ? (
       <span style={{ color: "green" }}>Congratulations! You are a Winner</span>
     ) : (
@@ -105,134 +113,107 @@ export const Bets = () => {
     if (match === undefined) {
       return "";
     }
-    console.log("ankush", match, transaction.matchId);
-    return match?.topPerformers?.length === 3 || false;
+    console.log("ankush jindal", match, transaction);
+    if (transaction.eventname === undefined) {
+      console.log("ankush jindal helloooo");
+      return "";
+    }
+    console.log("ankush jindal helloooo");
+
+    return (
+      match?.topPerformers[transaction.eventname].length ===
+        eventsMapUtil[transaction.eventname].numberOfWinners || false
+    );
   };
 
-  // const showBet = (transaction, index) => (
-  //   <div className="groupBet">
-  //     <div className="betsContainer"
-  //       key={transaction.created_at.seconds}
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "space-evenly",
-  //         margin: 2,
-  //         borderStyle: "solid",
-  //         alignItems: "center",
-  //       }}
-  //     >
-  //       <div
-  //         className="selected-players"
-  //         style={{
-  //           display: "flex",
-  //           width: "50%",
-  //           justifyContent: "space-around",
-  //         }}
-  //       >
-  //         {showMatchDetails(transaction)}
-  //         {Object.values(transaction.playerSelected).map((player, index) => (
-  //           <div key={index} style={{ display: "block", marginRight: 4 }}>
-  //             <img className="selPlayers" src={player.photo} alt={player.name} />
-  //             <div className="plyrName">{player.name}</div>
-  //           </div>
-  //         ))}
-  //       </div>
-  //       <div key={transaction.created_at.seconds}>
-  //         {!hasMatchEnded(transaction) ? (
-  //           <div>
-  //             <button className="matchprogress"
-  //             >
-  //               Match in progress
-  //             </button>
-  //           </div>
-  //         ) : (
-  //           <div>
-  //             <button className="chkresult"
-  //               style={{ border: "solid" }}
-  //               onClick={() => setShowResult(index)}
-  //             >
-  //               Check Result
-  //             </button>
-  //             {showResult !== -1 &&
-  //               showResult === index &&
-  //               transaction.matchId !== undefined && (
-  //                 <WinnersTable
-  //                   matchId={transaction.matchId}
-  //                   isOpen={showResult}
-  //                   onClose={closeModal}
-  //                   endMatchResult={endMatchResult(transaction)}
-  //                 />
-  //               )}
-  //           </div>
-  //         )}
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const ShowBetgroup = (transactiongroup, index) => {
     console.log("transac", transactiongroup);
-    return <div className="betContainer" style={{ borderStyle: "solid" }} key={index}>
-      <div className="matchHeader"> {showMatchDetails(transactiongroup[0])}
-        <div className="resultContainer" key={transactiongroup[0].created_at.seconds}>
-          {!hasMatchEnded(transactiongroup[0]) ? (
-            <div>
-              <button className="matchprogress"
-              >
-                Match in progress
-              </button>
-            </div>
-          ) : (
-            <div>
-              <button className="chkresult"
-                style={{ border: "solid" }}
-                onClick={() => setShowResult(index)}
-              >
-                Check Result
-              </button>
-              {showResult !== -1 &&
-                showResult === index &&
-                transactiongroup[0].matchId !== undefined && (
-                  <WinnersTable
-                    matchId={transactiongroup[0].matchId}
-                    isOpen={showResult}
-                    onClose={closeModal}
-                    endMatchResult={endMatchResult(transactiongroup[0])}
-                  />
-                )}
-            </div>
-          )}
-        </div>
-      </div>
-      {transactiongroup.map((transaction) => {
-        return <div
-          key={transaction.created_at.seconds}
-          style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            margin: 2,
-            alignItems: "center",
-          }}
-        >
+    return (
+      <div
+        className="betContainer"
+        style={{ borderStyle: "solid" }}
+        key={index}
+      >
+        <div className="matchHeader">
+          {" "}
+          {showMatchDetails(transactiongroup[0])}
           <div
-            className="selected-players"
-            style={{
-              display: "flex",
-              width: "80%",
-              justifyContent: "space-around",
-            }}
+            className="resultContainer"
+            key={transactiongroup[0].created_at.seconds}
           >
-            {Object.values(transaction.playerSelected).map((player, index) => (
-              <div key={index} style={{ display: "block", marginRight: 4 }}>
-                <img className="selPlayers" src={player.photo} alt={player.name} />
-                <div className="plyrName">{player.name}</div>
+            {!hasMatchEnded(transactiongroup[0]) ? (
+              <div>
+                <button className="matchprogress">Match in progress</button>
               </div>
-            ))}
+            ) : (
+              <div>
+                <button
+                  className="chkresult"
+                  style={{ border: "solid" }}
+                  onClick={() => setShowResult(index)}
+                >
+                  Check Result
+                </button>
+                {showResult !== -1 &&
+                  showResult === index &&
+                  transactiongroup[0].matchId !== undefined && (
+                    <WinnersTable
+                      matchId={transactiongroup[0].matchId}
+                      eventName={transactiongroup[0].eventname}
+                      isOpen={showResult}
+                      onClose={closeModal}
+                      endMatchResult={endMatchResult(transactiongroup[0])}
+                    />
+                  )}
+              </div>
+            )}
           </div>
-
         </div>
-      })}</div>
-  }
+        {transactiongroup.map((transaction) => {
+          return (
+            <div
+              key={transaction.created_at.seconds}
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                margin: 2,
+                alignItems: "center",
+              }}
+            >
+              <div
+                className="selected-players"
+                style={{
+                  display: "flex",
+                  width: "80%",
+                  justifyContent: "space-around",
+                }}
+              >
+                {Object.values(transaction.playerSelected).map(
+                  (player, index) => (
+                    <div
+                      key={index}
+                      style={{ display: "block", marginRight: 4 }}
+                    >
+                      <img
+                        className="selPlayers"
+                        src={player.photo}
+                        alt={player.name}
+                      />
+                      <div className="plyrName">{player.name}</div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -248,9 +229,10 @@ export const Bets = () => {
       )} */}
       <div>
         <h1>Your Bets</h1>
-        <div className="groupBet" >
-          {Object.values(groupedTransactions()).map((transactiongroup, index) => ShowBetgroup(transactiongroup, index))
-          }
+        <div className="groupBet">
+          {Object.values(groupedTransactions()).map((transactiongroup, index) =>
+            ShowBetgroup(transactiongroup, index)
+          )}
         </div>
       </div>
     </>
