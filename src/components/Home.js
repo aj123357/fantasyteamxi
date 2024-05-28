@@ -5,7 +5,6 @@ import { fetchMatches, fetchUser, fetchWalletAmount } from "../utils/userUtil";
 import UpcomingMatches from "./UpcomingMatches";
 
 const Home = () => {
-  const [topPerformers, setTopPerformers] = useState([]);
   const [selectedPerformer1, setSelectedPerformer1] = useState("");
   const [selectedPerformer2, setSelectedPerformer2] = useState("");
   const [isLoading, setIsLoading] = useState(true);

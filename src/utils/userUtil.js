@@ -32,6 +32,21 @@ export const fetchMatches = async () => {
   }
 };
 
+export const fetchMatchPlayers = async (teamNames) => {
+  try {
+    console.log("jindal", teamNames);
+    const data = await axios.get(`${host}fetchMatchPlayers`, {
+      params: { teams: teamNames },
+    });
+    console.log("fetchMatchPlayers", data);
+    return data.data;
+    // localStorage.setItem("matches", JSON.stringify(data.data));
+  } catch (err) {
+    console.log("err", err);
+    return [];
+  }
+};
+
 export const insertOrderToDb = async (
   orderId,
   selectedPlayers,

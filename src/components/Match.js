@@ -14,7 +14,11 @@ import {
   preMatchPaymentPage,
 } from "../utils/Constants";
 import { createOrderId, fetchCurrentMatchTransactions } from "../utils/dbUtil";
-import { fetchMatches, insertOrderToDb } from "../utils/userUtil";
+import {
+  fetchMatchPlayers,
+  fetchMatches,
+  insertOrderToDb,
+} from "../utils/userUtil";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams, useLocation } from "react-router-dom";
@@ -64,18 +68,22 @@ const Match = () => {
         allMatches = JSON.parse(localStorage.getItem("matches"));
       }
       const match = allMatches.find((match) => match.id === id);
-
       console.log("match", match);
       if (match === undefined) {
         setCurrentMatch({ players: [] });
-      } else
-        setCurrentMatch({
-          ...match,
-          players: [
-            ...players[match.teams[0]].teamPlayers,
-            ...players[match.teams[1]].teamPlayers,
-          ],
+      } else {
+        await fetchMatchPlayers(match.teams).then((players) => {
+          console.log("players", players);
+
+          setCurrentMatch({
+            ...match,
+            players: [
+              ...players[match.teams[0]].teamPlayers,
+              ...players[match.teams[1]].teamPlayers,
+            ],
+          });
         });
+      }
       fetchCurrentMatchTransactions();
       setIsLoading(false);
     };
@@ -137,13 +145,6 @@ const Match = () => {
       toast.error(err, {
         position: "top-right",
       });
-      // matchStatus === "noBets"
-      //   ? toast.error("No more Bets !", {
-      //       position: "top-right",
-      //     })
-      //   : toast.error("You have reached maximum bets limit for this match !", {
-      //       position: "top-right",
-      //     });
     } else {
       const matchStatus = matchHasStarted();
       const orderId = createOrderId();
